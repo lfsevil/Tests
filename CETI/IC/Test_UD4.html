@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Interactivo - UD4 Implementación de Medidas</title>
+<style>
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #eef2f3; 
+        color: #333;
+        display: flex; 
+        flex-direction: column;
+        align-items: center; 
+        padding: 30px 15px; 
+        margin: 0;
+    }
+    
+    .main-wrapper {
+        max-width: 800px;
+        width: 100%;
+    }
+
+    /* --- CABECERA DEL CURSO --- */
+    .course-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .course-header h1 { 
+        font-size: 22px; 
+        margin: 0 0 10px 0; 
+        color: #f8b400; 
+        line-height: 1.3;
+    }
+    .course-header h3 { 
+        margin: 0 0 5px 0; 
+        font-size: 18px; 
+        font-weight: 500; 
+    }
+    .course-header h4 { 
+        margin: 0 0 15px 0; 
+        font-size: 16px; 
+        font-weight: 400; 
+        opacity: 0.9; 
+    }
+    .course-header p { 
+        margin: 0; 
+        font-size: 15px; 
+        background: rgba(255,255,255,0.15); 
+        display: inline-block; 
+        padding: 6px 14px; 
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    /* --- CONTENEDOR DEL QUIZ --- */
+    #quiz-container { 
+        background: #ffffff; 
+        padding: 30px 40px; 
+        border-radius: 12px; 
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+    }
+    h2 { margin-top: 0; color: #2c3e50; font-size: 20px; line-height: 1.4; }
+    
+    /* --- BARRA DE PROGRESO DE APARTADOS --- */
+    #section-progress {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 25px;
+        justify-content: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    .section-badge {
+        background-color: #e9ecef;
+        color: #6c757d;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        opacity: 0.6;
+    }
+    .section-badge.active {
+        background-color: #28a745;
+        color: white;
+        opacity: 1;
+        box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3);
+        transform: scale(1.05);
+    }
+
+    /* --- HEADER DE PREGUNTA Y PUNTUACIÓN --- */
+    .header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    .score-badge {
+        background: #007bff;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .progress-text { font-size: 15px; color: #7f8c8d; font-weight: bold; }
+    
+    /* --- BOTONES DE OPCIONES --- */
+    .option-btn { 
+        display: block; 
+        width: 100%; 
+        padding: 15px; 
+        margin: 12px 0; 
+        border: 2px solid #e0e0e0; 
+        border-radius: 8px; 
+        background: #fff; 
+        cursor: pointer; 
+        text-align: left; 
+        font-size: 16px; 
+        transition: all 0.2s ease; 
+        color: #444;
+    }
+    .option-btn:hover { background: #f8f9fa; border-color: #b0bec5; }
+    .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+    
+    .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; font-weight: bold;}
+    .incorrect { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
+    
+    /* --- CAJA DE FEEDBACK --- */
+    #feedback-box { 
+        margin-top: 25px; 
+        padding: 15px 20px; 
+        border-radius: 8px; 
+        display: none; 
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .feedback-correct { background: #e2f3e5; border-left: 5px solid #28a745; color: #1e7e34; }
+    .feedback-incorrect { background: #fbe6e8; border-left: 5px solid #dc3545; color: #b11f2c; }
+    
+    /* --- BOTÓN SIGUIENTE --- */
+    #next-btn { 
+        display: none; 
+        margin-top: 25px; 
+        padding: 12px 25px; 
+        background: #2c3e50; 
+        color: white; 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        font-weight: bold;
+        float: right;
+    }
+    #next-btn:hover { background: #1a252f; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+    
+    /* --- PANTALLA FINAL --- */
+    #end-screen { text-align: center; display: none; padding: 20px; }
+    #end-screen h1 { color: #28a745; font-size: 36px; }
+    #end-screen p { font-size: 18px; color: #555; }
+</style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="course-header">
+        <h1>Curso de Especialización Ciberseguridad (CETI)</h1>
+        <h3>Módulo: Incidentes de Ciberseguridad</h3>
+        <h4>UD4 - Implementación de medidas de ciberseguridad</h4>
+        <p>Profesor: Fernando Sevil</p>
+    </div>
+
+    <div id="quiz-container">
+        <div id="quiz-content">
+            <div id="section-progress"></div>
+            
+            <div class="header-info">
+                <span class="progress-text" id="progress-text">Cargando...</span>
+                <span class="score-badge">Aciertos: <span id="score">0</span></span>
+            </div>
+            
+            <h2 id="question-text">Cargando preguntas y analizando apartados...</h2>
+            <div id="options-container"></div>
+            
+            <div id="feedback-box"></div>
+            
+            <div class="clearfix">
+                <button id="next-btn" onclick="nextQuestion()">Siguiente Pregunta &#8594;</button>
+            </div>
+        </div>
+        
+        <div id="end-screen">
+            <h1>¡Test Completado!</h1>
+            <p>Has finalizado el cuestionario completo de Implementación de Medidas (UD4).</p>
+            <p>Puntuación final: <strong id="final-score"></strong> de <span id="total-questions-text">100</span></p>
+            <button id="next-btn" style="display:inline-block; float:none; margin-top:20px;" onclick="location.reload()">Reiniciar Test</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. BASE DE DATOS CRUDA INYECTADA
+    const rawQuestionsText = `Pregunta 1: ¿Qué son los Playbooks o SOP en un Centro de Operaciones de Seguridad? a) Procedimientos técnicos detallados de actuación. b) Políticas genéricas de recursos humanos locales. c) Algoritmos de cifrado para redes corporativas. d) Manuales de instalación de hardware periférico. Respuesta correcta: a
+Pregunta 2: El marco de referencia mundial para la gestión de incidentes del NIST es: a) NIST SP 800-53 b) NIST SP 800-61 c) NIST SP 800-30 d) NIST SP 800-37 Respuesta correcta: b
+Pregunta 3: La gestión de incidentes es puramente técnica y no requiere gobernanza directiva. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 4: ¿Qué significan las siglas CSIRT en la gestión de incidentes de seguridad? a) Cyber Security Internal Recovery Tool b) Computer Security Incident Response Team c) Central System Intelligence Response Team d) Cyber System Incident Recovery Technique Respuesta correcta: b
+Pregunta 5: ¿Cuál es el objetivo estratégico de reducir el MTTR en un incidente? a) Aumentar la visibilidad de marketing. b) Reducir el tiempo de descanso del SOC. c) Minimizar el daño económico y de datos. d) Eliminar los falsos positivos de la red. Respuesta correcta: c
+Pregunta 6: El "Jump Bag" o kit de respuesta debe depender siempre de la red corporativa. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 7: ¿Qué es un "Tabletop Exercise" en la fase de preparación? a) Una prueba de penetración en red real. b) Un ejercicio de mesa con directivos. c) Un volcado de memoria RAM automatizado. d) Una copia de seguridad física en disco. Respuesta correcta: b
+Pregunta 8: ¿Qué busca determinar la fase de detección e identificación inicialmente? a) Si un evento anómalo es un incidente real. b) El coste económico exacto del ataque. c) El nombre real del atacante externo. d) La sentencia legal aplicable al caso. Respuesta correcta: a
+Pregunta 9: ¿Qué herramienta se asocia a la detección basada en host? a) Cortafuegos perimetral. b) Soluciones EDR / XDR. c) Sistemas NIDS / IPS. d) Analizador Wireshark. Respuesta correcta: b
+Pregunta 10: En el triaje de alertas, ¿cuál es el primer paso del analista? a) Formatear los equipos. b) Denunciar a la policía. c) Aislar el segmento de red. d) Validar un falso positivo. Respuesta correcta: d
+Pregunta 11: En un incidente, el "Paciente Cero" se refiere al primer equipo comprometido por el atacante. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 12: ¿Qué es una medida de contención a corto plazo según el NIST? a) Mover un servidor a cuarentena monitoreada. b) Desconectar inmediatamente el cable de red. c) Realizar una auditoría completa del sistema. d) Actualizar el plan de continuidad del negocio. Respuesta correcta: b
+Pregunta 13: El DNS Sinkholing se utiliza para redirigir el tráfico malicioso a una IP controlada por la empresa. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 14: ¿Cuál es un argumento principal para NO apagar un equipo infectado? a) Se pierde la evidencia almacenada en la RAM. b) Aumenta la velocidad del procesador interno. c) Se detiene la copia de seguridad programada. d) Consume demasiada energía eléctrica de golpe. Respuesta correcta: a
+Pregunta 15: La fase de mitigación y erradicación tiene como objetivo final: a) Denunciar el ataque ante la prensa local. b) Borrar las copias de seguridad afectadas. c) Eliminar el componente y cerrar la brecha. d) Apagar definitivamente el servidor dañado. Respuesta correcta: c
+Pregunta 16: El concepto de Hardening o bastionado consiste principalmente en: a) Aumentar la velocidad del disco duro. b) Reducir la superficie de exposición. c) Instalar software de diseño gráfico. d) Multiplicar el número de usuarios. Respuesta correcta: b
+Pregunta 17: La reinstalación Bare Metal implica formatear y reinstalar desde cero el sistema operativo. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 18: La recuperación desde copias de seguridad exige una condición vital: a) Validar que el backup esté totalmente limpio. b) Realizarla en horario de oficina únicamente. c) Usar discos duros de marca específica siempre. d) Notificar previamente al atacante externo. Respuesta correcta: a
+Pregunta 19: La reunión de lecciones aprendidas sirve principalmente para debatir la eficacia de los controles. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 20: ¿Qué elemento debe incluir obligatoriamente el Informe de Incidente Final? a) Nombres de todos los clientes afectados. b) Cronología de eventos, IoC y mejoras. c) Costes de marketing de la organización. d) Direcciones postales de los analistas. Respuesta correcta: b
+Pregunta 21: ¿Qué garantiza la retención de evidencias tras cerrar un incidente? a) Que se pague el rescate al atacante. b) Que no se rompa la cadena de custodia. c) Que el servidor funcione más rápido. d) Que los usuarios no cambien contraseñas. Respuesta correcta: b
+Pregunta 22: ¿Qué estándar internacional guía la preparación en gestión de incidentes? a) ISO/IEC 27035 b) ISO/IEC 9001 c) ISO/IEC 14001 d) ISO/IEC 20000 Respuesta correcta: a
+Pregunta 23: ¿Qué herramienta permite realizar análisis de tráfico de forma portable en un Jump Bag? a) Microsoft Word b) Wireshark Portable c) Adobe Photoshop d) Google Chrome Respuesta correcta: b
+Pregunta 24: Un ataque controlado para verificar las defensas actuales se denomina: a) Ingeniería inversa. b) Red Teaming / Pentesting. c) Copia de seguridad. d) Análisis forense. Respuesta correcta: b
+Pregunta 25: ¿Qué rol tiene el SIEM durante la fase de detección de incidentes? a) Correlacionar eventos de diferentes fuentes. b) Apagar automáticamente los servidores físicos. c) Denunciar el ataque a las fuerzas de seguridad. d) Restaurar las copias de seguridad eliminadas. Respuesta correcta: a
+Pregunta 26: La priorización de un incidente se realiza mediante una matriz que cruza impacto y urgencia. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 27: En el análisis de alcance, ¿qué se entiende por "Movimiento Lateral"? a) La copia de archivos a un disco externo. b) El salto del atacante hacia otros equipos. c) El cambio de un disco duro en el servidor. d) La rotación de personal en el equipo SOC. Respuesta correcta: b
+Pregunta 28: Microsegmentación es una técnica de contención que usa el firewall del host para bloquear conexiones. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 29: La gestión de credenciales durante un ataque implica necesariamente: a) Publicarlas en un tablón de anuncios local. b) Enviarlas por correo a todos los empleados. c) Revocar tokens de sesión y forzar reseteos. d) Mantenerlas intactas para estudiar al hacker. Respuesta correcta: c
+Pregunta 30: ¿A quién va dirigido principalmente un Resumen Ejecutivo post-incidente? a) A los técnicos de red. b) A los desarrolladores. c) A la alta dirección. d) A la policía local. Respuesta correcta: c
+Pregunta 31: ¿Qué define exactamente la ciberresiliencia en una organización? a) Evitar que los incidentes ocurran bajo cualquier costo económico. b) Capacidad de resistir, adaptarse y recuperarse de un ataque. c) Comprar el mejor software antivirus del mercado informático. d) Contratar a los mejores abogados para evitar cualquier demanda. Respuesta correcta: b
+Pregunta 32: El modelo de madurez CERT-RMM evalúa 26 áreas de proceso de resiliencia. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 33: ¿Qué significan las siglas RTO en la métrica de ciberresiliencia? a) Recovery Time Objective b) Random Threat Operation c) Real Time Observation d) Recovery Testing Output Respuesta correcta: a
+Pregunta 34: ¿Qué define el parámetro RPO (Recovery Point Objective)? a) El presupuesto máximo asignado a ciberseguridad. b) La cantidad de servidores físicos en la empresa. c) La pérdida de datos tolerable medida en tiempo. d) El tiempo que tarda el antivirus en actualizarse. Respuesta correcta: c
+Pregunta 35: El MTPD es el tiempo máximo que una organización sobrevive a una interrupción técnica. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 36: El RTO de un servicio crítico debe ser siempre mayor que su MTPD. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 37: ¿Qué estrategia de recuperación DRP garantiza un RPO igual a cero? a) Hot Site remoto. b) Cold Site vacío. c) Mirroring en espejo. d) Warm Site parcial. Respuesta correcta: c
+Pregunta 38: Un Cold Site es una sala acondicionada físicamente, pero que carece de servidores instalados. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 39: ¿Cuál es el objetivo principal del Análisis de Impacto de Negocio (BIA)? a) Comprar equipos de red modernos y eficientes. b) Determinar qué procesos son críticos o vitales. c) Despedir al personal técnico menos cualificado. d) Mejorar el diseño gráfico de las webs internas. Respuesta correcta: b
+Pregunta 40: ¿Qué proporciona la redundancia de comunicaciones en alta disponibilidad? a) Dos monitores para cada empleado de oficina. b) Dos proveedores de Internet con rutas distintas. c) Dos teclados en el servidor principal de la red. d) Dos antivirus instalados en el mismo servidor. Respuesta correcta: b
+Pregunta 41: La norma ISO internacional de referencia para el SGCN es: a) ISO 27001 b) ISO 22301 c) ISO 9001 d) ISO 31000 Respuesta correcta: b
+Pregunta 42: Las siglas PDCA del ciclo de mejora continua en resiliencia significan: a) Program, Deploy, Create, Analyze. b) Plan, Do, Check, Act. c) Prevent, Detect, Contain, Assess. d) Provide, Defend, Control, Audit. Respuesta correcta: b
+Pregunta 43: Una prueba "Tabletop" implica desconectar servidores de producción reales. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 44: En el modelo de nube IaaS, el cliente gestiona aplicaciones y datos, y el proveedor el hardware. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 45: El "Derecho de Auditoría" (Right to Audit) permite a la organización: a) Pedir dinero prestado al banco. b) Borrar datos del proveedor remoto. c) Inspeccionar controles del proveedor. d) Cancelar contratos sin previo aviso. Respuesta correcta: c
+Pregunta 46: La Gestión de Crisis tiene un enfoque principalmente estratégico y político, no solo técnico. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 47: ¿A qué se refiere el concepto de "Golden Hour" en comunicación de crisis? a) A los primeros 60 minutos para establecer la narrativa. b) A la hora de salida de los empleados de la oficina. c) A la medianoche, cuando el tráfico de red es menor. d) Al tiempo máximo permitido para realizar un backup. Respuesta correcta: a
+Pregunta 48: Pagar o no pagar un rescate de ransomware se considera una decisión de crisis de alto nivel. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 49: El líder técnico (CISO) traduce el estado del incidente al lenguaje de negocio en el Comité. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 50: En SaaS, el cliente es responsable del mantenimiento del sistema operativo del servidor. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 51: ¿Qué indicador (KPI) mide el tiempo medio que tarda la empresa en descubrir un compromiso? a) MTTR b) RTO c) MTTD d) RPO Respuesta correcta: c
+Pregunta 52: La política de continuidad del negocio debe ser aprobada siempre por la junta directiva. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 53: Un Hot Site requiere semanas de configuración antes de estar operativo ante un desastre. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 54: La gestión de incidentes en terceras partes incluye los servicios gestionados MSSP. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 55: Paralizar completamente la producción en una fábrica es una decisión técnica que toma el Nivel 1. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 56: ¿Qué es el escalado técnico en la gestión de incidentes de seguridad? a) Aumentar la velocidad de los discos duros locales. b) Subir el salario a los técnicos de soporte básicos. c) Pasar el problema a un equipo con mayor capacidad. d) Desconectar equipos para ahorrar energía eléctrica. Respuesta correcta: c
+Pregunta 57: El Nivel 1 del SOC (Triage) es el encargado de realizar la ingeniería inversa del malware. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 58: El impacto económico es uno de los criterios clave para realizar un escalado jerárquico. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 59: Si la red corporativa está comprometida, la comunicación técnica interna debe realizarse: a) Por el correo electrónico de la propia empresa. b) Usando mensajería externa fuera de banda. c) A través de la intranet corporativa habitual. d) Mediante señales de humo en la sede central. Respuesta correcta: b
+Pregunta 60: ¿Qué etiqueta del Traffic Light Protocol prohíbe compartir información fuera de la sala? a) TLP:CLEAR b) TLP:GREEN c) TLP:AMBER d) TLP:RED Respuesta correcta: d
+Pregunta 61: TLP:CLEAR indica que la información del incidente puede hacerse pública libremente. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 62: Según el RGPD, ¿cuál es el plazo máximo para notificar a la AEPD una fuga de datos personales? a) 24 horas b) 72 horas c) 15 días d) 30 días Respuesta correcta: b
+Pregunta 63: El INCIBE-CERT es el CSIRT de referencia en España para entidades del sector público. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 64: Para denunciar un sabotaje ante las Fuerzas de Seguridad, es requisito fundamental: a) Alterar las evidencias para que pesen menos. b) Reiniciar todos los servidores para borrarlos. c) Mantener intacta la cadena de custodia. d) Pagar el rescate exigido por los atacantes. Respuesta correcta: c
+Pregunta 65: ¿Para qué sirve la plataforma LUCIA del CCN-CERT? a) Para coordinar y reportar incidentes del ENS. b) Para cifrar correos electrónicos del personal. c) Para realizar copias de seguridad en la nube. d) Para auditar la facturación de la organización. Respuesta correcta: a
+Pregunta 66: La comunicación externa durante un incidente excluye totalmente a los proveedores y partners. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 67: Un incidente catalogado como "Crítico" escala de forma automática al CISO o Comité de Crisis. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 68: TLP:AMBER permite compartir la información con cualquier persona de la comunidad del sector. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 69: El escalado funcional se produce cuando falta autoridad legal para tomar la decisión. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 70: La Policía Nacional (CIBER) o la Guardia Civil (GDT) reciben las denuncias formales. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 71: ¿Qué técnica se recomienda tras un ataque severo de ransomware de privilegios? a) Desinfectar archivos con un antivirus casero. b) Reinstalación Bare Metal desde Gold Images. c) Limpiar la papelera de reciclaje localmente. d) Cambiar únicamente la contraseña de acceso. Respuesta correcta: b
+Pregunta 72: El software FIM se emplea para verificar la integridad de los archivos restaurados. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 73: En la secuenciación de restablecimiento, ¿qué capa debe activarse en primer lugar? a) Capa de Aplicación b) Capa Frontend Web c) Capa de Infraestructura d) Capa de Base de Datos Respuesta correcta: c
+Pregunta 74: La capa de Presentación y Acceso Externo (Frontend) es siempre la última en restablecerse. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 75: ¿Qué significa "Egress Filtering" durante la reintegración de la red? a) Permitir la entrada libre de correos electrónicos. b) Bloquear todos los puertos USB de los ordenadores. c) Limitar el tráfico que los servidores envían a Internet. d) Borrar los registros antiguos del firewall perimetral. Respuesta correcta: c
+Pregunta 76: Es altamente recomendable exigir autenticación multifactor (MFA) a accesos de terceros. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 77: ¿Qué certifican las pruebas UAT (User Acceptance Testing) tras la recuperación? a) Que la red está protegida contra ataques externos. b) Que las aplicaciones funcionan y los datos son correctos. c) Que el firewall perimetral bloquea IPs maliciosas. d) Que los usuarios saben usar el nuevo sistema operativo. Respuesta correcta: b
+Pregunta 78: El Pentesting Dirigido intenta explotar el vector de ataque original tras la recuperación. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 79: En la monitorización de alta intensidad, ¿qué ajuste se realiza en las reglas del SIEM? a) Se bajan los umbrales para recibir más alertas. b) Se suben los umbrales para evitar molestias. c) Se desactivan completamente durante un mes. d) Se borran todas las reglas previas al ataque. Respuesta correcta: a
+Pregunta 80: Restablecer servicios no implica solo encender equipos, sino validarlos estrictamente. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 81: El registro cronológico de actuaciones en un incidente es conocido técnicamente como: a) Audit Trail b) Backup Register c) Forensic Dump d) Master Image Respuesta correcta: a
+Pregunta 82: Asignar un "Escriba" durante un incidente evita que los analistas pierdan tiempo documentando. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 83: ¿Qué tipo de informe omite los detalles técnicos profundos y va a la alta dirección? a) Informe Forense b) Informe Ejecutivo c) Informe Post-Mortem d) Informe de Red Respuesta correcta: b
+Pregunta 84: El informe Post-Mortem incluye el mapeo MITRE ATT&CK y el análisis de la causa raíz. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 85: Un informe forense resulta prescindible si el caso de ciberseguridad se lleva a un juicio legal. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 86: El principio "Need to Know" restringe el acceso a la documentación sensible de incidentes. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 87: La documentación del plan de respuesta debe estar disponible en un entorno "fuera de banda". a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 88: ¿Qué función cumple la Base de Conocimiento (Knowledge Base) post-incidente? a) Estandarizar soluciones para problemas futuros. b) Guardar contraseñas antiguas de la plantilla. c) Borrar los registros del firewall del mes anterior. d) Denunciar a los empleados menos productivos. Respuesta correcta: a
+Pregunta 89: Los incidentes documentados no deben utilizarse para recalcular el Análisis de Riesgos. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 90: Cualquier error detectado en un Playbook durante la crisis debe corregirse en el Post-Mortem. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 91: En el contexto de un SOC, ¿qué es el proceso de "Tuning" tras un incidente? a) Traducir hallazgos en nuevas alertas en el SIEM. b) Actualizar la memoria RAM de todos los servidores. c) Mejorar la estética visual de las pantallas de alerta. d) Despedir al analista que permitió que entrara el ataque. Respuesta correcta: a
+Pregunta 92: Las plataformas SOAR se utilizan para ejecutar de forma manual procesos forenses lentos. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 93: El Threat Hunting proactivo busca indicadores de compromiso latentes en la infraestructura. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 94: ¿Qué son las plataformas MISP en inteligencia de amenazas? a) Bases de datos locales de clientes y facturación. b) Plataformas seguras para compartir IoCs con terceros. c) Programas de mensajería instantánea para empleados. d) Antivirus instalados en los ordenadores de dirección. Respuesta correcta: b
+Pregunta 95: Los estándares STIX y TAXII se usan para automatizar el intercambio de inteligencia. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 96: Los ISACs son grupos de WhatsApp donde los hackers comparten técnicas maliciosas. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 97: Si un ataque materializa un riesgo considerado "Improbable", se debe revisar el Análisis de Riesgos. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 98: Las auditorías post-incidente buscan asegurar que las correcciones sean temporales. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 99: Si el ataque fue por phishing, es vital actualizar las campañas de concienciación de empleados. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 100: El seguimiento cierra el ciclo PDCA analizando estructuralmente por qué falló el control inicial. a) Verdadero b) Falso Respuesta correcta: a`;
+
+    let quizData = [];
+    
+    // 2. MOTOR DE CLASIFICACIÓN (Analiza la pregunta para asignarle el apartado de la UD4)
+    function determineSection(text) {
+        text = text.toLowerCase();
+        if (text.match(/soc|tuning|soar|hunting|misp|stix|taxii|isac|prevención|pdca/)) return "4.6. Prevención Futura";
+        if (text.match(/informe|escriba|audit trail|custodia|post-mortem|knowledge base|documentación/)) return "4.5. Documentación";
+        if (text.match(/bare metal|gold image|fim|egress|qa|uat|pentesting dirigido|hiper-vigilancia|restablecimiento/)) return "4.4. Restablecimiento";
+        if (text.match(/escalado|tlp|aepd|lucia|notificación|comunicación externa/)) return "4.3. Flujos y Escalado";
+        if (text.match(/ciberresiliencia|rto|rpo|mtpd|bcp|bia|drp|mirroring|sgcn|pdca|crisis|terceras partes/)) return "4.2. Ciberresiliencia";
+        if (text.match(/playbook|sop|csirt|cert|mttr|jump bag|paciente cero|sinkholing|erradicación|lecciones aprendidas|nist/)) return "4.1. Procedimientos";
+        return "4.1. Procedimientos"; // Fallback por defecto
+    }
+
+    // 3. PARSER AUTOMÁTICO (Convierte el texto bruto en un objeto JSON dinámico)
+    function parseQuestionsText(rawText) {
+        const questionsArray = [];
+        const blocks = rawText.split(/(?=Pregunta \d+:)/).filter(b => b.trim().length > 0);
+        
+        blocks.forEach(block => {
+            try {
+                // Enunciado
+                const qTextMatch = block.match(/Pregunta \d+:\s*(.*?)(?=\s*a\))/s);
+                if (!qTextMatch) return;
+                const questionText = qTextMatch[1].trim();
+
+                // Opciones
+                const optionsBlockMatch = block.match(/(a\).*?)(?=Respuesta correcta:)/s);
+                if (!optionsBlockMatch) return;
+                const optionsText = optionsBlockMatch[1].trim();
+
+                // Letra Correcta
+                const answerMatch = block.match(/Respuesta correcta:\s*([a-d])/i);
+                if (!answerMatch) return;
+                const correctLetter = answerMatch[1].toLowerCase();
+
+                // Dividir y montar opciones
+                const options = [];
+                const parts = optionsText.split(/(?:\s+|^|\n)([a-d])\)\s+/i).filter(x => x.trim() !== "");
+                for (let i = 0; i < parts.length; i += 2) {
+                    const letter = parts[i].toLowerCase();
+                    const text = parts[i + 1] ? parts[i + 1].trim() : "";
+                    options.push({ text: text, correct: letter === correctLetter });
+                }
+
+                questionsArray.push({
+                    apartado: determineSection(questionText),
+                    question: questionText,
+                    options: options,
+                    feedback: "La opción correcta era la " + correctLetter.toUpperCase() + "."
+                });
+            } catch (e) {
+                console.error("Error al procesar bloque:", block);
+            }
+        });
+        return questionsArray;
+    }
+
+    // 4. ORDENACIÓN (Para que la progresión de la barra tenga sentido lógico)
+    const orderMap = {
+        "4.1. Procedimientos": 1,
+        "4.2. Ciberresiliencia": 2,
+        "4.3. Flujos y Escalado": 3,
+        "4.4. Restablecimiento": 4,
+        "4.5. Documentación": 5,
+        "4.6. Prevención Futura": 6
+    };
+
+    // --- INICIALIZACIÓN DE LA APP ---
+    quizData = parseQuestionsText(rawQuestionsText);
+    quizData.sort((a, b) => orderMap[a.apartado] - orderMap[b.apartado]);
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    const questionTextElement = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackBox = document.getElementById('feedback-box');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreElement = document.getElementById('score');
+    const progressText = document.getElementById('progress-text');
+    const quizContent = document.getElementById('quiz-content');
+    const endScreen = document.getElementById('end-screen');
+    const letters = ['A', 'B', 'C', 'D'];
+
+    function renderSectionProgress() {
+        const progressContainer = document.getElementById('section-progress');
+        progressContainer.innerHTML = ''; 
+        
+        const sections = [...new Set(quizData.map(q => q.apartado))];
+        const currentSection = quizData[currentQuestionIndex].apartado;
+
+        sections.forEach(sec => {
+            const badge = document.createElement('span');
+            badge.className = 'section-badge';
+            if (sec === currentSection) badge.classList.add('active');
+            badge.innerText = sec; 
+            progressContainer.appendChild(badge);
+        });
+    }
+
+    function loadQuestion() {
+        feedbackBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        
+        renderSectionProgress();
+        
+        const currentData = quizData[currentQuestionIndex];
+        progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+        questionTextElement.innerText = currentData.question;
+        
+        currentData.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<strong>${letters[index]})</strong> ${option.text}`;
+            btn.onclick = () => selectAnswer(btn, option.correct, currentData.feedback);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedBtn, isCorrect, feedbackHtml) {
+        const allButtons = optionsContainer.querySelectorAll('.option-btn');
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if(isCorrect) {
+            selectedBtn.classList.add('correct');
+            score++;
+            scoreElement.innerText = score;
+            feedbackBox.innerHTML = `<strong>¡Muy bien! ¡Acierto!</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-correct';
+        } else {
+            selectedBtn.classList.add('incorrect');
+            allButtons.forEach(btn => {
+                const btnData = quizData[currentQuestionIndex].options.find(o => btn.innerHTML.includes(o.text));
+                if(btnData && btnData.correct) btn.classList.add('correct');
+            });
+            feedbackBox.innerHTML = `<strong>Respuesta incorrecta.</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-incorrect';
+        }
+        
+        feedbackBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+        setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if(currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            quizContent.style.display = 'none';
+            endScreen.style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-questions-text').innerText = quizData.length;
+        }
+    }
+
+    window.onload = () => {
+        if (quizData.length > 0) {
+            loadQuestion();
+        } else {
+            questionTextElement.innerText = "Error cargando las preguntas. Revisa el script.";
+        }
+    };
+</script>
+
+</body>
+</html>
