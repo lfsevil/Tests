@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Interactivo - UD5 Documentación de Incidentes</title>
+<style>
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #eef2f3; 
+        color: #333;
+        display: flex; 
+        flex-direction: column;
+        align-items: center; 
+        padding: 30px 15px; 
+        margin: 0;
+    }
+    
+    .main-wrapper {
+        max-width: 800px;
+        width: 100%;
+    }
+
+    .course-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .course-header h1 { 
+        font-size: 22px; 
+        margin: 0 0 10px 0; 
+        color: #f8b400; 
+        line-height: 1.3;
+    }
+    .course-header h3 { 
+        margin: 0 0 5px 0; 
+        font-size: 18px; 
+        font-weight: 500; 
+    }
+    .course-header h4 { 
+        margin: 0 0 15px 0; 
+        font-size: 16px; 
+        font-weight: 400; 
+        opacity: 0.9; 
+    }
+    .course-header p { 
+        margin: 0; 
+        font-size: 15px; 
+        background: rgba(255,255,255,0.15); 
+        display: inline-block; 
+        padding: 6px 14px; 
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    #quiz-container { 
+        background: #ffffff; 
+        padding: 30px 40px; 
+        border-radius: 12px; 
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+    }
+    h2 { margin-top: 0; color: #2c3e50; font-size: 20px; line-height: 1.4; }
+    
+    #section-progress {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 25px;
+        justify-content: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    .section-badge {
+        background-color: #e9ecef;
+        color: #6c757d;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        opacity: 0.6;
+    }
+    .section-badge.active {
+        background-color: #28a745;
+        color: white;
+        opacity: 1;
+        box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3);
+        transform: scale(1.05);
+    }
+
+    .header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    .score-badge {
+        background: #007bff;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .progress-text { font-size: 15px; color: #7f8c8d; font-weight: bold; }
+    
+    .option-btn { 
+        display: block; 
+        width: 100%; 
+        padding: 15px; 
+        margin: 12px 0; 
+        border: 2px solid #e0e0e0; 
+        border-radius: 8px; 
+        background: #fff; 
+        cursor: pointer; 
+        text-align: left; 
+        font-size: 16px; 
+        transition: all 0.2s ease; 
+        color: #444;
+    }
+    .option-btn:hover { background: #f8f9fa; border-color: #b0bec5; }
+    .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+    
+    .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; font-weight: bold;}
+    .incorrect { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
+    
+    #feedback-box { 
+        margin-top: 25px; 
+        padding: 15px 20px; 
+        border-radius: 8px; 
+        display: none; 
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .feedback-correct { background: #e2f3e5; border-left: 5px solid #28a745; color: #1e7e34; }
+    .feedback-incorrect { background: #fbe6e8; border-left: 5px solid #dc3545; color: #b11f2c; }
+    
+    #next-btn { 
+        display: none; 
+        margin-top: 25px; 
+        padding: 12px 25px; 
+        background: #2c3e50; 
+        color: white; 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        font-weight: bold;
+        float: right;
+    }
+    #next-btn:hover { background: #1a252f; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+    
+    #end-screen { text-align: center; display: none; padding: 20px; }
+    #end-screen h1 { color: #28a745; font-size: 36px; }
+    #end-screen p { font-size: 18px; color: #555; }
+</style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="course-header">
+        <h1>Curso de Especialización Ciberseguridad (CETI)</h1>
+        <h3>Módulo: Incidentes de Ciberseguridad</h3>
+        <h4>UD5 - Detección y documentación de incidentes de ciberseguridad</h4>
+        <p>Profesor: Fernando Sevil</p>
+    </div>
+
+    <div id="quiz-container">
+        <div id="quiz-content">
+            <div id="section-progress"></div>
+            
+            <div class="header-info">
+                <span class="progress-text" id="progress-text">Cargando...</span>
+                <span class="score-badge">Aciertos: <span id="score">0</span></span>
+            </div>
+            
+            <h2 id="question-text">Cargando preguntas y analizando apartados...</h2>
+            <div id="options-container"></div>
+            
+            <div id="feedback-box"></div>
+            
+            <div class="clearfix">
+                <button id="next-btn" onclick="nextQuestion()">Siguiente Pregunta &#8594;</button>
+            </div>
+        </div>
+        
+        <div id="end-screen">
+            <h1>¡Test Completado!</h1>
+            <p>Has finalizado el cuestionario de Detección y Documentación (UD5).</p>
+            <p>Puntuación final: <strong id="final-score"></strong> de <span id="total-questions-text">100</span></p>
+            <button id="next-btn" style="display:inline-block; float:none; margin-top:20px;" onclick="location.reload()">Reiniciar Test</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. BASE DE DATOS CRUDA INYECTADA
+    const rawQuestionsText = `Pregunta 1: La gestión de un ciberincidente finaliza exclusivamente cuando se expulsa al atacante de la red. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 2: ¿Qué consecuencia principal tiene no notificar una brecha de seguridad según el RGPD? a) El bloqueo temporal de los servidores internos. b) Sanciones legales y un grave impacto reputacional. c) La pérdida inmediata de la licencia comercial. d) La obligación de contratar a un auditor externo. Respuesta correcta: b
+Pregunta 3: ¿Qué documento establece directrices claras sobre a quién y cómo notificar un incidente? a) El contrato de confidencialidad del empleado. b) El Procedimiento de notificación de incidentes. c) El manual técnico del firewall perimetral. d) El registro de copias de seguridad diarias. Respuesta correcta: b
+Pregunta 4: ¿Cuál es una de las preguntas fundamentales que debe responder el procedimiento de notificación? a) ¿Qué marca de servidores utiliza la empresa afectada? b) ¿Qué información se debe transmitir a las partes? c) ¿Cuántas horas trabaja el equipo técnico de guardia? d) ¿Cuál es el coste del rescate exigido por el hacker? Respuesta correcta: b
+Pregunta 5: Todo evento anómalo detectado por el SOC requiere una notificación externa inmediata. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 6: En España, ¿cuál es el centro de respuesta de referencia para ciudadanos y empresas privadas? a) CCN-CERT b) INCIBE-CERT c) ESPDEF-CERT d) Mando Conjunto del Ciberespacio Respuesta correcta: b
+Pregunta 7: ¿Qué organismo debe ser notificado si el incidente afecta a un Ministerio o Ayuntamiento? a) INCIBE-CERT b) ESPDEF-CERT c) CCN-CERT d) Policía Nacional Respuesta correcta: c
+Pregunta 8: El CCN-CERT gestiona incidentes que afectan a la Seguridad Nacional y a la Administración Pública. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 9: ¿Qué organismo es competente en la ciberdefensa del ámbito militar y Fuerzas Armadas? a) INCIBE-CERT b) AEPD c) CCN-CERT d) ESPDEF-CERT Respuesta correcta: d
+Pregunta 10: La Agencia Española de Protección de Datos (AEPD) es un equipo técnico de respuesta ante ciberataques. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 11: Según el RGPD, la notificación a la AEPD tras constatar una brecha de datos debe hacerse en: a) Un plazo máximo de 24 horas. b) Un plazo máximo de 48 horas. c) Un plazo máximo de 72 horas. d) Un plazo máximo de una semana. Respuesta correcta: c
+Pregunta 12: ¿Qué protocolo mundial clasifica con quién se puede compartir información sobre un incidente? a) STIX (Structured Threat Information eXpression) b) TLP (Traffic Light Protocol) c) TAXII (Trusted Automated eXchange) d) MISP (Malware Information Sharing Platform) Respuesta correcta: b
+Pregunta 13: Una etiqueta TLP:RED indica que la información es de libre distribución en Internet. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 14: ¿Qué significa la etiqueta TLP:AMBER en el intercambio de inteligencia? a) Información estrictamente pública y abierta. b) Información solo para las personas en la reunión. c) Intercambio limitado bajo "necesidad de conocer". d) Compartible con toda la comunidad profesional del sector. Respuesta correcta: c
+Pregunta 15: La información etiquetada como TLP:GREEN se puede publicar abiertamente en redes sociales. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 16: ¿Cuál es el lenguaje estandarizado utilizado para describir amenazas cibernéticas a las máquinas? a) MISP b) TAXII c) TLP d) STIX Respuesta correcta: d
+Pregunta 17: ¿Qué es MISP (Malware Information Sharing Platform)? a) Un protocolo de transporte de archivos cifrados. b) Una plataforma para compartir indicadores de compromiso. c) Un firewall de nueva generación para empresas. d) Un sistema operativo basado en Linux para forense. Respuesta correcta: b
+Pregunta 18: ¿Cuál de los siguientes es un criterio de notificación interno basado en el impacto en el negocio? a) La actualización de un software antivirus de la empresa. b) La caída de la tienda online durante más de dos horas. c) Un escaneo de puertos bloqueado por el firewall. d) El cambio de contraseña rutinario de un directivo. Respuesta correcta: b
+Pregunta 19: Un impacto reputacional ocurre cuando el incidente trasciende a la prensa o redes sociales. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 20: Según la normativa NIS2 y el ENS, ¿qué criterio define un "impacto significativo"? a) Si la interrupción supera el tiempo máximo tolerable (MTPD). b) Si el ataque se realiza desde un país extranjero conocido. c) Si el malware detectado es de tipo ransomware específicamente. d) Si el departamento técnico necesita hacer horas extras. Respuesta correcta: a
+Pregunta 21: ¿Qué obliga el RGPD si una brecha supone un alto riesgo para los derechos de los afectados? a) Ocultar la información para no alarmar al mercado. b) Notificar obligatoriamente a los afectados directamente. c) Pagar el rescate para evitar la filtración de datos. d) Cambiar el servidor físico por uno de otra marca. Respuesta correcta: b
+Pregunta 22: Si los datos robados estaban cifrados robustamente y el atacante no tiene la clave, no hay obligación de notificar a los usuarios. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 23: ¿Cuál es el primer paso al interactuar con un CSIRT de referencia y abrir un incidente? a) Enviar un correo electrónico en texto plano detallado. b) Publicar un comunicado oficial en redes sociales. c) Establecer un canal seguro de comunicación (ej. PGP). d) Formatear los discos duros para eliminar la amenaza. Respuesta correcta: c
+Pregunta 24: La plataforma LUCIA se utiliza para abrir tickets de forma segura en el ámbito del sector público. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 25: ¿Qué permite el "número de expediente" o ticket asignado por el CSIRT? a) Garantizar la trazabilidad de todas las comunicaciones. b) Descifrar automáticamente los archivos del servidor. c) Pagar la multa impuesta por la AEPD de forma rápida. d) Desconectar remotamente a los atacantes del sistema. Respuesta correcta: a
+Pregunta 26: La colaboración técnica del CSIRT puede incluir proporcionar herramientas de descifrado no públicas. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 27: En respuesta a incidentes, es preferible un informe perfecto que llegue tarde que uno incompleto rápido. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 28: ¿Qué debe indicar el apartado "Datos de contacto" en el primer reporte al CSIRT? a) El nombre del atacante sospechoso. b) La marca del firewall perimetral usado. c) El responsable de gestionar el incidente. d) La contraseña de acceso al servidor afectado. Respuesta correcta: c
+Pregunta 29: Especificar si el ataque es ransomware o phishing pertenece a la categorización del incidente. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 30: ¿Qué se incluye en los detalles técnicos (IoCs) del primer reporte? a) Las pérdidas económicas estimadas provisionales. b) Hashes maliciosos, IPs atacantes y correos origen. c) El listado de empleados que estaban trabajando. d) La marca y modelo de los discos duros afectados. Respuesta correcta: b
+Pregunta 31: Enviar las acciones de contención ya tomadas evita que el CSIRT sugiera medidas redundantes. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 32: Legalmente, el tiempo límite para notificar empieza a contar desde que el atacante entra en el sistema. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 33: Según la directiva NIS2, ¿cuál es el plazo para enviar la alerta temprana al CSIRT de referencia? a) 12 horas desde el inicio del ataque. b) 24 horas desde que se tiene conocimiento. c) 72 horas desde que se cierra el incidente. d) Un mes desde que se restauran los datos. Respuesta correcta: b
+Pregunta 34: La normativa NIS2 exige un informe exhaustivo final en el plazo de un mes tras cerrar el incidente. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 35: ¿Qué significa el estado "Contenido" en el ciclo de vida de un incidente? a) El ataque fue frenado, pero los servicios aún no se han restaurado. b) El ataque ha sido investigado y se determinó que era falso. c) Los servicios operan con normalidad y la amenaza ha desaparecido. d) El informe técnico post-incidente ha sido entregado a gerencia. Respuesta correcta: a
+Pregunta 36: El estado "En análisis" (Triaje) implica investigar si la alerta es una amenaza real o un falso positivo. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 37: ¿Qué valor de cierre se asigna cuando una alerta se genera por un comportamiento normal o un error de configuración? a) Incidente mitigado. b) Intento fallido. c) Falso positivo. d) Brecha de seguridad. Respuesta correcta: c
+Pregunta 38: Un "Incidente mitigado" es aquel que tuvo éxito inicialmente pero fue contenido rápidamente sin impacto crítico. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 39: ¿Cuál es el objetivo principal de la notificación interna de incidentes? a) Publicar inmediatamente el suceso en la página web oficial. b) Coordinar la respuesta y evitar fugas de información incontrolables. c) Despedir a los empleados responsables del fallo de seguridad. d) Solicitar ayuda a otras empresas de la competencia del sector. Respuesta correcta: b
+Pregunta 40: Utilizar Microsoft Teams corporativo para coordinar la respuesta es siempre la mejor práctica durante un ciberataque. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 41: ¿Qué son los canales "Out-of-band" en la gestión de crisis? a) Canales de televisión pública que informan del suceso. b) Redes sociales corporativas abiertas a los clientes. c) Aplicaciones de mensajería independiente y cifrada. d) Servidores de correo alojados en la intranet afectada. Respuesta correcta: c
+Pregunta 42: La primera notificación interna formal se dirige a los responsables de la toma de decisiones (CEO, CISO). a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 43: El principio de "necesidad de conocer" (Need-to-Know) establece que: a) Todos los empleados deben conocer los detalles técnicos de la red. b) La prensa debe ser informada de cualquier sospecha rápidamente. c) Solo el personal estrictamente necesario debe conocer los detalles. d) Los atacantes deben saber que la empresa ha detectado su intrusión. Respuesta correcta: c
+Pregunta 44: Las instrucciones al personal general deben centrarse en la jerga técnica de la vulnerabilidad explotada. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 45: Una instrucción adecuada para el personal general durante un incidente sería: a) "Apaguen la conexión Wi-Fi y no conecten el cable de red". b) "Publiquen la caída del sistema en sus redes sociales locales". c) "Abran los archivos adjuntos de correos desconocidos hoy". d) "Conecten sus dispositivos personales a la red de invitados". Respuesta correcta: a
+Pregunta 46: Notificar a los socios comerciales y proveedores es crucial para proteger la cadena de suministro (Supply chain). a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 47: ¿Qué medida permite a un socio comercial prepararse si nuestra red ha sido atacada? a) Comprar acciones de nuestra empresa rápidamente. b) Bloquear conexiones entrantes desde nuestra infraestructura. c) Enviar campañas publicitarias a nuestros clientes actuales. d) Aumentar el límite de almacenamiento de su correo electrónico. Respuesta correcta: b
+Pregunta 48: La notificación a clientes afectados debe ocultar información para evitar perder su confianza. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 49: Una notificación a clientes debe ser clara, transparente y proactiva en las soluciones recomendadas. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 50: En la gestión de prensa, la "Hora de Oro" (Golden Hour) indica que la empresa debe ser la primera en comunicar la historia. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 51: Cualquier técnico del SOC tiene autorización para dar declaraciones oficiales a la prensa local. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 52: La notificación de un incidente a la prensa debe evitar especular sobre la autoría del ataque. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 53: ¿Qué herramienta suele usarse junto a STIX para el transporte de inteligencia de amenazas? a) TLP b) MISP c) TAXII d) LUCIA Respuesta correcta: c
+Pregunta 54: El protocolo TLP:CLEAR significa que la información es confidencial y no puede ser distribuida. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 55: El Esquema Nacional de Seguridad (ENS) obliga a notificar incidentes de impacto significativo en el sector público. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 56: Una brecha de datos personales solo se notifica a la AEPD si supone un riesgo para los derechos y libertades. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 57: Si se confirma un intento de login fallido desde el exterior, ¿es obligatorio reportarlo siempre a la AEPD? a) Sí, todos los eventos anómalos se reportan inmediatamente. b) No, porque no hay afectación de datos personales confirmada. c) Sí, porque la normativa NIS2 lo exige para pymes siempre. d) No, salvo que el atacante solicite un rescate por adelantado. Respuesta correcta: b
+Pregunta 58: Al abrir un incidente en LUCIA, la comunicación se realiza mediante canales cifrados. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 59: ¿Qué taxonomía estándar se utiliza frecuentemente para categorizar incidentes en Europa? a) Taxonomía de la NASA. b) Taxonomía de ENISA. c) Taxonomía de la AEPD. d) Taxonomía de TLP. Respuesta correcta: b
+Pregunta 60: La estimación del impacto inicial debe incluir el porcentaje de la operativa empresarial paralizada. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 61: El plazo de 72 horas del RGPD puede ampliarse si la investigación técnica no ha concluido. a) Falso, la notificación inicial es innegociable en 72 horas. b) Verdadero, siempre que la empresa pida permiso al atacante. c) Falso, el plazo máximo es siempre de 24 horas en todos los casos. d) Verdadero, no es necesario notificar hasta resolver el caso. Respuesta correcta: a
+Pregunta 62: Según la directiva NIS2, la actualización del incidente con IoCs se debe enviar en 72 horas. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 63: ¿Qué estado del incidente indica que los servicios han sido restaurados y la amenaza eliminada? a) Contenido b) Resuelto c) Cerrado d) Nuevo Respuesta correcta: b
+Pregunta 64: Un valor de cierre "Intento fallido" indica que los sistemas de defensa bloquearon el ataque real. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 65: La asignación correcta del valor de cierre permite calcular métricas y definir presupuestos anuales. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 66: El uso de aplicaciones como Signal o Threema es un ejemplo de comunicación "Out-of-band". a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 67: La notificación inicial a la dirección debe utilizar una gran cantidad de jerga técnica compleja. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 68: Recomendar a un cliente afectado que cambie sus contraseñas es una medida proactiva en la notificación. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 69: Es recomendable prometer a la prensa fechas exactas de recuperación aunque no haya certeza absoluta. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 70: ¿Por qué es importante el "efecto vacuna" en el intercambio de inteligencia de amenazas? a) Porque instala antivirus en los ordenadores de los clientes. b) Porque inmuniza legalmente a la empresa ante futuras multas. c) Porque alerta al sector permitiendo preparar defensas preventivas. d) Porque mejora la velocidad de la conexión a internet de la red. Respuesta correcta: c
+Pregunta 71: Si una empresa privada no crítica sufre un incidente grave de ransomware, debe notificarlo a: a) ESPDEF-CERT b) INCIBE-CERT c) CCN-CERT d) Mando Conjunto del Ciberespacio Respuesta correcta: b
+Pregunta 72: El INCIBE-CERT actúa como punto de contacto central para el sector empresarial privado. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 73: La etiqueta TLP:AMBER significa que la información es estrictamente confidencial para los presentes. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 74: ¿Qué evalúa el criterio de "Impacto Operacional" en la notificación interna? a) La cantidad de dinero gastada en el presupuesto de marketing. b) Si el incidente ha trascendido a la prensa nacional e internacional. c) Si se ha interrumpido un servicio crítico para la empresa. d) El nivel de enfado del comité directivo de la compañía. Respuesta correcta: c
+Pregunta 75: ¿Qué elemento exime de notificar a los afectados de una brecha según el RGPD? a) Que la fuga de datos ocurriera en fin de semana o festivo. b) Que los datos estuvieran cifrados robustamente sin clave expuesta. c) Que el atacante haya prometido borrar la información robada. d) Que la empresa pague una multa de forma anticipada. Respuesta correcta: b
+Pregunta 76: Un correo electrónico cifrado mediante PGP es un canal adecuado para enviar evidencias al CSIRT. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 77: ¿Qué dato es crucial enviar en la primera fase iterativa de notificación? a) El presupuesto anual de ciberseguridad. b) Datos de contacto y disponibilidad del responsable. c) El listado de nóminas de todos los empleados. d) Las contraseñas de los usuarios no afectados. Respuesta correcta: b
+Pregunta 78: El plazo legal para notificar empieza desde el momento exacto en que el atacante entra al sistema. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 79: En el flujo de trabajo, el estado "Cerrado" implica que se ha redactado el informe final y firmado el fin de la crisis. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 80: El valor de cierre "Brecha de seguridad" indica que el ataque tuvo éxito y provocó pérdida de datos. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 81: El canal corporativo de Microsoft Teams es seguro porque los atacantes nunca interceptan la red interna. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 82: En la gestión de prensa, debe existir un único portavoz oficial debidamente preparado con el departamento legal. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 83: MISP es una plataforma de código cerrado utilizada exclusivamente en los Estados Unidos. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 84: ¿Cuál es la consecuencia de no tener un procedimiento de notificación ensayado y documentado? a) La creación de un escenario de crisis ordenado y estructurado. b) Un flujo de información controlado, rápido y sumamente eficaz. c) Decidir sobre la marcha y generar un desastre organizativo. d) El aumento automático de la ciberresiliencia del negocio. Respuesta correcta: c
+Pregunta 85: La directiva NIS2 y el ENS comparten criterios para definir el "impacto significativo" de un incidente. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 86: ¿Qué permite el protocolo TAXII en inteligencia de amenazas? a) Descifrar correos PGP de forma automática. b) El transporte automatizado de amenazas descritas en STIX. c) Evaluar el impacto reputacional en las redes sociales. d) Clasificar los colores de los documentos en formato TLP. Respuesta correcta: b
+Pregunta 87: Un ataque DDoS que detiene la tienda online es un incidente categorizado como de "Disponibilidad". a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 88: El RGPD protege exclusivamente a las empresas y sus derechos corporativos. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 89: Indicar que "se han bloqueado las IPs" es parte de la sección de "Acciones tomadas" en un reporte. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 90: El número de expediente asignado por un CSIRT permite evitar que se dupliquen esfuerzos durante la crisis. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 91: En caso de crisis, los empleados deben informar libremente a los medios sobre lo que saben. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 92: La notificación de incidentes no solo responde a obligaciones legales, sino a mantener la confianza empresarial. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 93: Un incidente grave sin fuga de datos personales siempre debe notificarse a la AEPD obligatoriamente. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 94: El INCIBE-CERT, el CCN-CERT y el ESPDEF-CERT son ejemplos de CSIRTs nacionales en España. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 95: Compartir información bajo la premisa "Need-to-Know" asegura que la prensa tenga acceso inmediato. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 96: TLP:GREEN indica que la información se puede compartir internamente y con la comunidad profesional. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 97: Es un error notificar a los clientes el robo de su información financiera para no asustarlos. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 98: El reporte "Alerta temprana" bajo NIS2 solo exige indicar si el ataque parece ser grave o transfronterizo. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 99: El flujo normal de un ticket de incidente comienza con el estado "Cerrado" y termina "En análisis". a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 100: Instruir a la plantilla para no conectar portátiles a la red por cable es una medida operativa clara en crisis. a) Verdadero b) Falso Respuesta correcta: a`;
+
+    let quizData = [];
+    
+    // 2. MOTOR DE CLASIFICACIÓN (Analiza la pregunta para asignarle el apartado de la UD5)
+    function determineSection(text) {
+        text = text.toLowerCase();
+        // 5.3 Notificación Externa / Terceros
+        if (text.match(/socio|proveedor|cliente afectado|prensa|hora de oro|golden hour|supply chain/)) return "5.3. Notificación Externa";
+        
+        // 5.2 Notificación Interna
+        if (text.match(/notificación interna|out-of-band|dirección|comité|need-to-know|empleado|plantilla|teams|signal/)) return "5.2. Notificación Interna";
+        
+        // 5.1 Procedimientos Generales y Organismos
+        if (text.match(/procedimiento|rgpd|aepd|incibe|ccn-cert|espdef|csirt|tlp|stix|taxii|misp|lucia|nis2|ens|plazo|72 horas|24 horas|ticket|expediente|estado|cierre/)) return "5.1. Procedimientos y Organismos";
+        
+        return "5.1. Procedimientos y Organismos"; // Fallback por defecto
+    }
+
+    // 3. PARSER AUTOMÁTICO
+    function parseQuestionsText(rawText) {
+        const questionsArray = [];
+        const blocks = rawText.split(/(?=Pregunta \d+:)/).filter(b => b.trim().length > 0);
+        
+        blocks.forEach(block => {
+            try {
+                // Enunciado
+                const qTextMatch = block.match(/Pregunta \d+:\s*(.*?)(?=\s*a\))/s);
+                if (!qTextMatch) return;
+                const questionText = qTextMatch[1].trim();
+
+                // Opciones
+                const optionsBlockMatch = block.match(/(a\).*?)(?=Respuesta correcta:)/s);
+                if (!optionsBlockMatch) return;
+                const optionsText = optionsBlockMatch[1].trim();
+
+                // Letra Correcta
+                const answerMatch = block.match(/Respuesta correcta:\s*([a-d])/i);
+                if (!answerMatch) return;
+                const correctLetter = answerMatch[1].toLowerCase();
+
+                // Dividir y montar opciones
+                const options = [];
+                const parts = optionsText.split(/(?:\s+|^|\n)([a-d])\)\s+/i).filter(x => x.trim() !== "");
+                for (let i = 0; i < parts.length; i += 2) {
+                    const letter = parts[i].toLowerCase();
+                    const text = parts[i + 1] ? parts[i + 1].trim() : "";
+                    options.push({ text: text, correct: letter === correctLetter });
+                }
+
+                questionsArray.push({
+                    apartado: determineSection(questionText),
+                    question: questionText,
+                    options: options,
+                    feedback: "La opción correcta era la " + correctLetter.toUpperCase() + "."
+                });
+            } catch (e) {
+                console.error("Error al procesar bloque:", block);
+            }
+        });
+        return questionsArray;
+    }
+
+    // 4. ORDENACIÓN LÓGICA DE APARTADOS
+    const orderMap = {
+        "5.1. Procedimientos y Organismos": 1,
+        "5.2. Notificación Interna": 2,
+        "5.3. Notificación Externa": 3
+    };
+
+    // --- INICIALIZACIÓN DE LA APP ---
+    quizData = parseQuestionsText(rawQuestionsText);
+    quizData.sort((a, b) => orderMap[a.apartado] - orderMap[b.apartado]);
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    const questionTextElement = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackBox = document.getElementById('feedback-box');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreElement = document.getElementById('score');
+    const progressText = document.getElementById('progress-text');
+    const quizContent = document.getElementById('quiz-content');
+    const endScreen = document.getElementById('end-screen');
+    const letters = ['A', 'B', 'C', 'D'];
+
+    function renderSectionProgress() {
+        const progressContainer = document.getElementById('section-progress');
+        progressContainer.innerHTML = ''; 
+        
+        const sections = [...new Set(quizData.map(q => q.apartado))];
+        const currentSection = quizData[currentQuestionIndex].apartado;
+
+        sections.forEach(sec => {
+            const badge = document.createElement('span');
+            badge.className = 'section-badge';
+            if (sec === currentSection) badge.classList.add('active');
+            badge.innerText = sec; 
+            progressContainer.appendChild(badge);
+        });
+    }
+
+    function loadQuestion() {
+        feedbackBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        
+        renderSectionProgress();
+        
+        const currentData = quizData[currentQuestionIndex];
+        progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+        questionTextElement.innerText = currentData.question;
+        
+        currentData.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<strong>${letters[index]})</strong> ${option.text}`;
+            btn.onclick = () => selectAnswer(btn, option.correct, currentData.feedback);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedBtn, isCorrect, feedbackHtml) {
+        const allButtons = optionsContainer.querySelectorAll('.option-btn');
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if(isCorrect) {
+            selectedBtn.classList.add('correct');
+            score++;
+            scoreElement.innerText = score;
+            feedbackBox.innerHTML = `<strong>¡Muy bien! ¡Acierto!</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-correct';
+        } else {
+            selectedBtn.classList.add('incorrect');
+            allButtons.forEach(btn => {
+                const btnData = quizData[currentQuestionIndex].options.find(o => btn.innerHTML.includes(o.text));
+                if(btnData && btnData.correct) btn.classList.add('correct');
+            });
+            feedbackBox.innerHTML = `<strong>Respuesta incorrecta.</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-incorrect';
+        }
+        
+        feedbackBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+        setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if(currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            quizContent.style.display = 'none';
+            endScreen.style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-questions-text').innerText = quizData.length;
+        }
+    }
+
+    window.onload = () => {
+        if (quizData.length > 0) {
+            loadQuestion();
+        } else {
+            questionTextElement.innerText = "Error cargando las preguntas. Revisa el script.";
+        }
+    };
+</script>
+
+</body>
+</html>
