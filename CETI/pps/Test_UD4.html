@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Interactivo - UD4 Seguridad Móvil</title>
+<style>
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #eef2f3; 
+        color: #333;
+        display: flex; 
+        flex-direction: column;
+        align-items: center; 
+        padding: 30px 15px; 
+        margin: 0;
+    }
+    
+    .main-wrapper {
+        max-width: 800px;
+        width: 100%;
+    }
+
+    /* --- CABECERA DEL CURSO --- */
+    .course-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .course-header h1 { 
+        font-size: 22px; 
+        margin: 0 0 10px 0; 
+        color: #f8b400; 
+        line-height: 1.3;
+    }
+    .course-header h3 { 
+        margin: 0 0 5px 0; 
+        font-size: 18px; 
+        font-weight: 500; 
+    }
+    .course-header h4 { 
+        margin: 0 0 15px 0; 
+        font-size: 16px; 
+        font-weight: 400; 
+        opacity: 0.9; 
+    }
+    .course-header p { 
+        margin: 0; 
+        font-size: 15px; 
+        background: rgba(255,255,255,0.15); 
+        display: inline-block; 
+        padding: 6px 14px; 
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    /* --- CONTENEDOR DEL QUIZ --- */
+    #quiz-container { 
+        background: #ffffff; 
+        padding: 30px 40px; 
+        border-radius: 12px; 
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+    }
+    h2 { margin-top: 0; color: #2c3e50; font-size: 20px; line-height: 1.4; }
+    
+    /* --- BARRA DE PROGRESO DE APARTADOS --- */
+    #section-progress {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 25px;
+        justify-content: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    .section-badge {
+        background-color: #e9ecef;
+        color: #6c757d;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        opacity: 0.6;
+    }
+    .section-badge.active {
+        background-color: #28a745;
+        color: white;
+        opacity: 1;
+        box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3);
+        transform: scale(1.05);
+    }
+
+    /* --- HEADER DE PREGUNTA Y PUNTUACIÓN --- */
+    .header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    .score-badge {
+        background: #007bff;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .progress-text { font-size: 15px; color: #7f8c8d; font-weight: bold; }
+    
+    /* --- BOTONES DE OPCIONES --- */
+    .option-btn { 
+        display: block; 
+        width: 100%; 
+        padding: 15px; 
+        margin: 12px 0; 
+        border: 2px solid #e0e0e0; 
+        border-radius: 8px; 
+        background: #fff; 
+        cursor: pointer; 
+        text-align: left; 
+        font-size: 16px; 
+        transition: all 0.2s ease; 
+        color: #444;
+    }
+    .option-btn:hover { background: #f8f9fa; border-color: #b0bec5; }
+    .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+    
+    .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; font-weight: bold;}
+    .incorrect { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
+    
+    /* --- CAJA DE FEEDBACK --- */
+    #feedback-box { 
+        margin-top: 25px; 
+        padding: 15px 20px; 
+        border-radius: 8px; 
+        display: none; 
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .feedback-correct { background: #e2f3e5; border-left: 5px solid #28a745; color: #1e7e34; }
+    .feedback-incorrect { background: #fbe6e8; border-left: 5px solid #dc3545; color: #b11f2c; }
+    
+    /* --- BOTÓN SIGUIENTE --- */
+    #next-btn { 
+        display: none; 
+        margin-top: 25px; 
+        padding: 12px 25px; 
+        background: #2c3e50; 
+        color: white; 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        font-weight: bold;
+        float: right;
+    }
+    #next-btn:hover { background: #1a252f; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+    
+    /* --- PANTALLA FINAL --- */
+    #end-screen { text-align: center; display: none; padding: 20px; }
+    #end-screen h1 { color: #28a745; font-size: 36px; }
+    #end-screen p { font-size: 18px; color: #555; }
+</style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <!-- CABECERA DE INFORMACIÓN -->
+    <div class="course-header">
+        <h1>Curso de Especialización Ciberseguridad en Entornos de las Tecnologías de la Información (CETI)</h1>
+        <h3>Módulo: Puesta en Producción Segura</h3>
+        <h4>UD4 - Detección de problemas de seguridad en aplicaciones móviles</h4>
+        <p>Profesor: Fernando Sevil</p>
+    </div>
+
+    <!-- CONTENEDOR DEL TEST -->
+    <div id="quiz-container">
+        <div id="quiz-content">
+            
+            <!-- Barra de progreso de la teoría -->
+            <div id="section-progress"></div>
+            
+            <div class="header-info">
+                <span class="progress-text" id="progress-text">Cargando...</span>
+                <span class="score-badge">Aciertos: <span id="score">0</span></span>
+            </div>
+            
+            <h2 id="question-text">Cargando preguntas y analizando apartados...</h2>
+            <div id="options-container"></div>
+            
+            <div id="feedback-box"></div>
+            
+            <div class="clearfix">
+                <button id="next-btn" onclick="nextQuestion()">Siguiente Pregunta &#8594;</button>
+            </div>
+        </div>
+        
+        <div id="end-screen">
+            <h1>¡Test Completado!</h1>
+            <p>Has finalizado el cuestionario completo de Seguridad Móvil (UD4).</p>
+            <p>Puntuación final: <strong id="final-score"></strong> de <span id="total-questions-text">100</span></p>
+            <button id="next-btn" style="display:inline-block; float:none; margin-top:20px;" onclick="location.reload()">Reiniciar Test</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. BASE DE DATOS CRUDA (Las 100 preguntas exactas del profesor copiadas tal cual)
+    const rawQuestionsText = `Pregunta 1: ¿Cuál es el modo de despliegue CASB estándar y preferido para entornos BYOD sin instalar agentes? a) Forward Proxy b) Modo Standalone c) Modo API Local d) Reverse Proxy Respuesta correcta: d)
+Pregunta 2: ¿Qué paso crítico realiza el auditor antes de volver a empaquetar una app en el Re-signing de Android? a) Desactivar la protección de hardware Secure Enclave b) Sustituir el archivo classes.dex por uno vacío c) Borrar el archivo AndroidManifest.xml d) Eliminar la firma original en la carpeta META-INF Respuesta correcta: d)
+Pregunta 3: ¿Qué limitación principal tiene el Reverse Proxy en un CASB? a) Solo protege las aplicaciones sancionadas por la empresa b) No puede integrarse con sistemas como Azure AD c) Requiere hacer Root o Jailbreak al dispositivo d) Ralentiza la velocidad del dispositivo drásticamente Respuesta correcta: a)
+Pregunta 4: En Zero Trust, si el dispositivo es conforme pero el archivo es muy sensible, ¿qué política aplica el CASB? a) Enviar el archivo por correo sin cifrar b) Borrar el archivo de la nube inmediatamente c) DLP: Cifrar el archivo al descargar mediante DRM d) Bloquear el acceso permanentemente al usuario Respuesta correcta: c)
+Pregunta 5: ¿Qué archivo temporal en la carpeta 'assets' suele contener contraseñas ficticias de prueba? a) Archivos .dex o .smali b) Archivos .mock o .json c) Archivos .mp3 o .png d) Archivos .xml o .plist Respuesta correcta: b)
+Pregunta 6: ¿Por qué la ofuscación de código (como ProGuard o R8) no protege eficazmente contra el "Hardcoding" de secretos? a) Porque solo funciona en aplicaciones desarrolladas con C++. b) Porque facilita la inyección de código mediante el framework Frida. c) Porque renombra clases y métodos, pero no cifra las cadenas de texto. d) Porque los sistemas operativos móviles prohíben su uso en producción. Respuesta correcta: c)
+Pregunta 7: En la arquitectura del procesador, ¿dónde se ejecuta el sistema operativo con acceso total al hardware? a) En el User Mode o Modo Usuario b) En el Kernel Mode o Modo Núcleo c) En el Application Mode d) En el Sandbox Mode Respuesta correcta: b)
+Pregunta 8: Como auditor en iOS, ¿qué perfil de aprovisionamiento (Provisioning Profile) solicitarías para poder adjuntar un depurador (debugger)? a) Enterprise Profile b) App Store Profile c) Ad-Hoc Distribution d) Development Profile Respuesta correcta: d)
+Pregunta 9: ¿Qué vulnerabilidad permitía el método de firma 'v1 Scheme' en Android? a) Descifrar el código Java instantáneamente b) Rotar la clave privada sin autorización c) Inyectar archivos en el ZIP sin romper la firma (Vulnerabilidad Janus) d) Borrar el certificado raíz del teléfono Respuesta correcta: c)
+Pregunta 10: En SQLite, una inserción de datos convencional (INSERT) guarda la información en formato... a) Cifrado AES-256 en la nube b) Texto plano en el archivo .db o .sqlite c) Código binario ininteligible d) Imágenes PNG ofuscadas Respuesta correcta: b)
+Pregunta 11: ¿Qué comportamiento caracteriza al fenómeno de 'Shadow IT'? a) El acceso remoto autorizado a servidores VPN corporativos b) La actualización silenciosa del sistema operativo iOS c) El desarrollo de aplicaciones en la nube usando DevOps d) El uso de apps no autorizadas por IT, como conversores PDF gratuitos Respuesta correcta: d)
+Pregunta 12: ¿Qué atributo de iOS Keychain borra la clave de memoria si la pantalla está apagada? a) kSecAttrAccessibleWhenUnlocked b) kSecAttrAccessibleAlways c) kSecAttrAccessibleAfterFirstUnlock d) kSecAttrAccessibleWhenPasscodeSet Respuesta correcta: a)
+Pregunta 13: En Android, ¿qué librería de Jetpack cifra el XML tradicional de configuraciones? a) SecureXMLSettings b) SafePreferencesData c) AndroidVaultPrefs d) EncryptedSharedPreferences Respuesta correcta: d)
+Pregunta 14: ¿Qué contraseña por defecto utiliza el certificado de depuración en Android Studio? a) '123456' b) 'debug' c) 'android' d) 'admin' Respuesta correcta: c)
+Pregunta 15: ¿Qué perfil de iOS se usa para pruebas beta como TestFlight y no permite depuración? a) Enterprise Profile b) App Store Profile c) Ad-Hoc Distribution d) Development Profile Respuesta correcta: c)
+Pregunta 16: ¿En qué carpeta privada de Android tiene una aplicación permisos exclusivos de lectura/escritura? a) /var/mobile/Containers/ b) /data/data/com.nombre.app/ c) /root/apps/data/ d) /system/apps/private/ Respuesta correcta: b)
+Pregunta 17: En la protección contra amenazas, ¿qué evento detecta el CASB como 'Viaje Imposible'? a) Descarga de archivos de más de 10 GB en una hora b) Inicios de sesión desde países distantes en pocos minutos c) Apertura de aplicaciones sin conexión a internet d) Fallos de contraseña en más de 10 ocasiones Respuesta correcta: b)
+Pregunta 18: ¿Qué riesgo supone que el Portapapeles (Clipboard) sea un recurso compartido en el móvil? a) Borra el contenido si se apaga la pantalla b) Cambia el idioma del dispositivo sin permiso c) Cualquier app maliciosa en segundo plano puede leer su contenido d) Añade publicidad a los textos copiados Respuesta correcta: c)
+Pregunta 19: En la validación en el servidor, ¿qué asegura que el recibo no fue falsificado por herramientas como Lucky Patcher? a) La verificación de la firma criptográfica por Google/Apple b) El importe económico gastado en la transacción c) La rapidez con la que el usuario realizó la compra d) La dirección IP del teléfono móvil del usuario Respuesta correcta: a)
+Pregunta 20: ¿Qué hardware de Apple aísla físicamente las claves del procesador principal? a) El coprocesador Secure Enclave b) El chip de memoria RAM principal c) La antena del módulo Wi-Fi d) La tarjeta gráfica (GPU) Respuesta correcta: a)
+Pregunta 21: ¿Qué metadatos en una imagen pueden revelar el domicilio del desarrollador? a) El nivel de compresión JPEG b) Geolocalización GPS en los datos EXIF c) La resolución de la imagen (DPI) d) El formato del color (RGB o CMYK) Respuesta correcta: b)
+Pregunta 22: ¿Cómo implementa Android el aislamiento de aplicaciones (Sandboxing) a nivel de sistema operativo? a) Asignando un identificador de usuario (UId) único a cada aplicación. b) Ejecutando todas las aplicaciones bajo el mismo proceso central. c) Creando una máquina virtual de hardware para cada app instalada. d) Bloqueando el acceso a la red por defecto en el kernel. Respuesta correcta: a)
+Pregunta 23: En Android, ¿qué mejora de seguridad introduce el "v2 Scheme" (Full APK Signing) frente al método v1 clásico? a) Evita que las contraseñas se guarden en texto plano. b) Cifra el contenido de las bases de datos SQLite locales. c) Firma el archivo APK completo como un bloque binario único. d) Permite cambiar la clave de firma sin perder compatibilidad. Respuesta correcta: c)
+Pregunta 24: ¿Qué herramienta estándar se utiliza para aplicar cifrado transparente a nivel de página en bases de datos SQLite móviles? a) CoreData Secure b) SQLCipher c) EncryptedSharedPreferences d) Realm Database Respuesta correcta: b)
+Pregunta 25: ¿Qué herramientas gratuitas permiten decompilar un archivo .dex a código Java? a) Jadx, Apktool o Ghidra b) Nmap, Wireshark o Burp c) SQLmap, Nessus o OpenVAS d) Docker, Kubernetes o Swarm Respuesta correcta: a)
+Pregunta 26: ¿A qué formato intermedio se compila el código Java/Kotlin en Android? a) A librerías dinámicas en archivos .so b) A código fuente de C++ en archivos .cpp c) A Bytecode Dalvik/ART en archivos .dex d) A código ensamblador en archivos .asm Respuesta correcta: c)
+Pregunta 27: ¿Qué pilar criptográfico garantiza que la nueva versión de una app provenga del creador original? a) Aislamiento de procesos concurrentes b) Confidencialidad de la base de datos c) Autoría o Confianza (Trust) d) Disponibilidad del código fuente Respuesta correcta: c)
+Pregunta 28: ¿Por qué es peligroso usar una librería antigua como Retrofit 1.9 en la app? a) Los atacantes buscarán vulnerabilidades públicas CVE conocidas b) Impedirá que funcione el cifrado SQLite c) Google Play eliminará la aplicación en 24 horas d) La aplicación consumirá más batería Respuesta correcta: a)
+Pregunta 29: Para evitar ataques de repetición (Replay Attacks) en compras integradas, la validación final del recibo y del producto debe realizarse obligatoriamente en los servidores del desarrollador. a) Verdadero b) Falso Respuesta correcta: a)
+Pregunta 30: En una arquitectura de seguridad "Zero Trust", ¿qué información aporta el sistema MDM al CASB para decidir si permite un acceso? a) Identifica las redes Wi-Fi públicas bloqueadas por defecto. b) Informa sobre el estado de salud y cumplimiento del dispositivo. c) Cifra dinámicamente todos los archivos almacenados en la nube. d) Reemplaza las contraseñas de los usuarios por tokens aleatorios. Respuesta correcta: b)
+Pregunta 31: Durante el bypass de compras, ¿qué se modifica para que la función 'onPaymentSuccess' siempre se ejecute? a) La lógica de la app mediante Patching o Hooking b) La contraseña de la cuenta de Google del usuario c) El certificado raíz del navegador web d) El archivo de la base de datos SQL del servidor Respuesta correcta: a)
+Pregunta 32: El término "Shadow IT" hace referencia a las aplicaciones y servicios en la nube que los empleados utilizan para trabajar sin la autorización o el conocimiento del departamento de IT. a) Verdadero b) Falso Respuesta correcta: a)
+Pregunta 33: ¿Cómo se comunican las aplicaciones en iOS dado el estricto Sandboxing? a) Compartiendo la misma carpeta /data/data/ b) Leyendo el portapapeles del sistema operativo de forma continua c) Mediante mecanismos regulados como URL Schemes o App Groups d) Accediendo a la RAM compartida del Kernel Respuesta correcta: c)
+Pregunta 34: Si no se realiza el proceso de 'strip' al compilar, ¿qué se filtra en el binario? a) La clave privada del Keystore b) Símbolos de depuración o Debug Symbols c) El historial de navegación del usuario d) Los mensajes de WhatsApp Respuesta correcta: b)
+Pregunta 35: ¿Qué técnica criptográfica se recomienda para proteger claves imprescindibles en el arranque de la app? a) Firmas v1 Scheme b) Caja Blanca (Whitebox Cryptography) c) Codificación Base64 d) Cifrado César tradicional Respuesta correcta: b)
+Pregunta 36: ¿Qué técnica de prueba busca iniciar una compra y cancelarla en el último momento? a) Ataque de Reproducción o Replay Attack b) Ingeniería del Caos o Chaos Engineering c) Fuga de Información por Canales Laterales d) Prueba de Compras Falsas o Stubbing Respuesta correcta: d)
+Pregunta 37: ¿Qué perfil de iOS es usado a menudo por malware para evitar la revisión de la App Store? a) Ad-Hoc Profile b) StoreKit Profile c) Enterprise Profile d) Development Profile Respuesta correcta: c)
+Pregunta 38: ¿A qué nivel de permisos de Android corresponde la lectura de contactos del usuario? a) Permisos Especiales o Special Permissions b) Permisos Normales o Normal Permissions c) Permisos de Firma o Signature Permissions d) Permisos Peligrosos o Dangerous Permissions Respuesta correcta: d)
+Pregunta 39: ¿Qué riesgo supone encontrar la ruta '/Users/admin/Backend/' en el binario? a) Cifra el disco duro del usuario que instala la app b) Revela el nombre de usuario y estructura, facilitando Spear Phishing c) Elimina los símbolos de depuración automáticamente d) Bloquea el acceso a la App Store Respuesta correcta: b)
+Pregunta 40: En una auditoría móvil, ¿con qué debemos cruzar la lista de permisos del AndroidManifest.xml? a) Con la funcionalidad real de la aplicación b) Con el precio de la aplicación en la tienda c) Con los comentarios del código JavaScript d) Con el tamaño del archivo APK Respuesta correcta: a)
+Pregunta 41: La implementación nativa por defecto de SQLite en Android e iOS aplica automáticamente un algoritmo de cifrado a los datos insertados para evitar su extracción directa. a) Falso b) Verdadero Respuesta correcta: a)
+Pregunta 42: Si un auditor encuentra la función 'verifySignature()' dentro del código de la app móvil, ¿qué indica? a) Que la aplicación está lista para producción b) Que el desarrollador usó SQLCipher correctamente c) Una Alerta Roja, porque la validación ocurre del lado del cliente d) Una buena práctica de seguridad certificada Respuesta correcta: c)
+Pregunta 43: En iOS, ¿qué elemento del Code Signing indica en qué dispositivos puede ejecutarse una app? a) El Provisioning Profile b) El Entitlement File c) El Certificado de Desarrollador d) El App ID Respuesta correcta: a)
+Pregunta 44: ¿Qué bandera (flag) debe usar una app en Android para evitar que el sistema tome capturas en la multitarea? a) FLAG_SECURE b) FLAG_NO_SCREENSHOT c) FLAG_PRIVATE d) FLAG_HIDDEN Respuesta correcta: a)
+Pregunta 45: ¿Qué archivo contiene el código de la aplicación compilado en un instalador iOS? a) El archivo .ipa b) El archivo .apk c) El archivo .dmg d) El archivo .exe Respuesta correcta: a)
+Pregunta 46: ¿Qué mecanismo de iOS previene que una app maliciosa lea las aplicaciones instaladas en el dispositivo? a) El Sandboxing mediante Restricción Total del contenedor b) El cifrado de la tarjeta SIM del teléfono c) La firma del código v1 Scheme d) La validación de compras en el servidor Respuesta correcta: a)
+Pregunta 47: En iOS, ¿qué ocurre si una aplicación intenta usar la cámara sin tener la clave de descripción de uso en el archivo Info.plist? a) La cámara funciona, pero con una resolución muy reducida. b) El sistema operativo cierra la aplicación inmediatamente. c) Se muestra una advertencia genérica de seguridad al usuario. d) El Kernel bloquea el acceso, pero la app sigue funcionando. Respuesta correcta: b)
+Pregunta 48: ¿Por qué el almacenamiento local en un móvil se considera hostil e inseguro por defecto? a) Porque siempre está conectado a internet sin cifrado b) Porque los discos duros móviles se rompen fácilmente c) Porque un atacante puede robarlo y hacerle Root o Jailbreak d) Porque el sistema operativo borra archivos al azar Respuesta correcta: c)
+Pregunta 49: Al analizar código híbrido (JavaScript) en apps móviles, ¿qué fuga de información sensible suele ser un hallazgo muy común? a) Los tokens de sesión cifrados nativamente en el Keystore. b) Comentarios con direcciones de servidores internos de desarrollo. c) Las claves privadas del certificado de firma del desarrollador. d) Los identificadores únicos de hardware (IMEI o dirección MAC). Respuesta correcta: b)
+Pregunta 50: ¿Qué devuelve el Kernel de Android si una app intenta acceder a la cámara sin permiso? a) Cierra el sistema operativo completo (Panic) b) Un aviso en pantalla que ignora la petición c) Una excepción de seguridad (SecurityException) d) Permite el acceso por una única vez Respuesta correcta: c)
+Pregunta 51: En el análisis estático de un binario, ¿qué comando de terminal extrae los caracteres legibles para buscar tokens o URLs ocultas? a) apktool b) checksec c) strings d) exiftool Respuesta correcta: c)
+Pregunta 52: ¿Qué garantizan principalmente los mecanismos de firma de aplicaciones en los ecosistemas móviles modernos? a) La integridad del binario y la autoría del desarrollador. b) Que la aplicación no contiene ningún tipo de malware. c) La confidencialidad absoluta del código fuente. d) El rendimiento óptimo del código en el procesador. Respuesta correcta: a)
+Pregunta 53: En el Code Signing de iOS, ¿quién emite el Certificado de Desarrollador? a) El propio desarrollador localmente b) Google c) Apple d) Microsoft Respuesta correcta: c)
+Pregunta 54: ¿Qué herramienta intercepta pagos localmente actuando como Man-in-the-Middle en Android? a) Ghidra o Radare2 b) Frida o Strace c) Lucky Patcher o Freedom d) Apktool o Jadx Respuesta correcta: c)
+Pregunta 55: ¿Qué técnica CASB sustituye un DNI por caracteres aleatorios antes de subir a AWS? a) Hashing SHA-256 b) Cifrado DRM c) Ofuscación ProGuard d) Tokenización Respuesta correcta: d)
+Pregunta 56: ¿Qué permiso especial en Android se usa habitualmente en ataques de Overlay o Cloaking? a) ACCESS_FINE_LOCATION b) READ_CONTACTS c) SYSTEM_ALERT_WINDOW d) INTERNET Respuesta correcta: c)
+Pregunta 57: Si una app genera un PDF de recibo, ¿qué fuga de información puede contener dicho PDF? a) El código fuente de toda la aplicación b) La versión de la librería generadora, ej. iText c) Las claves de cifrado del servidor Backend d) El código PIN de la tarjeta de crédito Respuesta correcta: b)
+Pregunta 58: ¿Qué función cumple el Kernel cuando una aplicación realiza una Llamada al Sistema (Syscall) para acceder al hardware? a) Traduce el código de la aplicación a lenguaje máquina. b) Optimiza el consumo de batería del procesador del móvil. c) Cifra automáticamente los datos antes de enviarlos. d) Verifica el UID del proceso contra la tabla de permisos. Respuesta correcta: d)
+Pregunta 59: Si un desarrollador pierde su 'Release Keystore' de Android, ¿qué consecuencia enfrenta? a) La aplicación dejará de funcionar en todos los móviles b) La base de datos SQLite se descifrará públicamente c) No podrá actualizar su aplicación en Google Play nunca más d) Tendrá que pagar una multa a Google Respuesta correcta: c)
+Pregunta 60: ¿Para qué sirven los Permisos de Firma (Signature Permissions) en Android? a) Para modificar la configuración de red del dispositivo b) Para comunicación segura entre apps del mismo desarrollador c) Para leer la agenda de contactos del usuario d) Para poder subir la aplicación a Google Play Respuesta correcta: b)
+Pregunta 61: ¿Qué componente del ecosistema Zero Trust informa al CASB si el móvil tiene Jailbreak? a) El archivo Info.plist de la app b) La verificación de Entitlements de iOS c) La verificación MDM - Mobile Device Management d) El sistema de permisos de Android Respuesta correcta: c)
+Pregunta 62: ¿Qué nivel de permisos no supone un gran riesgo y se concede automáticamente en Android? a) Permisos Especiales b) Permisos Normales c) Permisos de Firma d) Permisos Peligrosos Respuesta correcta: b)
+Pregunta 63: En el Server-Side Receipt Validation, ¿quién pregunta a los servidores de Google/Apple si el recibo es legítimo? a) La aplicación móvil instalada b) El router Wi-Fi al que está conectado el usuario c) El Backend o servidor del desarrollador d) El usuario a través de un código CAPTCHA Respuesta correcta: c)
+Pregunta 64: ¿Cuál es la principal ventaja del Modo API del CASB? a) Modifica el código fuente de la aplicación en vivo b) Bloquea amenazas en tiempo real antes de que se suban c) Permite interceptar tráfico de Shadow IT fácilmente d) No requiere instalar agentes en los móviles ni ralentiza la red Respuesta correcta: d)
+Pregunta 65: ¿Qué herramientas permiten al auditor 'engancharse' (hooking) a las llamadas al sistema? a) TruffleHog o Git-secrets b) Frida o Strace c) Apktool o Jadx d) MobSF o Checksec Respuesta correcta: b)
+Pregunta 66: ¿Qué ocurre si un atacante obtiene privilegios de Root en Android o Jailbreak en iOS? a) Activa el cifrado AES-256 automáticamente b) Rompe el modelo de seguridad del Sandboxing c) Cierra las llamadas al sistema (Syscalls) d) Elimina la firma del desarrollador de la app Respuesta correcta: b)
+Pregunta 67: De los 4 pilares del CASB, ¿cuál se encarga de detectar que un archivo viola la normativa GDPR? a) Cumplimiento Normativo o Compliance b) Seguridad de Datos o Data Security c) Protección contra Amenazas o Threat Protection d) Visibilidad o Visibility Respuesta correcta: a)
+Pregunta 68: En el análisis estático manual, ¿en qué carpetas del instalador descomprimido busca el auditor? a) En la partición de recuperación del móvil b) En la carpeta /dev/null c) En la carpeta System32/ d) En las carpetas assets/ y res/ Respuesta correcta: d)
+Pregunta 69: ¿Qué framework automatizado analiza el binario y detecta si es depurable o está ofuscado? a) Burp Suite Enterprise b) MobSF - Mobile Security Framework c) Metasploit Framework d) Nessus Vulnerability Scanner Respuesta correcta: b)
+Pregunta 70: ¿Qué ventaja ofrece la validación en el servidor ante suscripciones canceladas? a) Comprobar en tiempo real el estado de la suscripción b) Instalar actualizaciones silenciosas c) Reducir el coste de la tarifa de Google/Apple d) Evitar que el usuario borre la aplicación Respuesta correcta: a)
+Pregunta 71: ¿Qué modo de despliegue CASB no toca el tráfico en tiempo real y usa las APIs oficiales de la nube? a) Modo API u Out-of-Band b) Reverse Proxy c) Gateway Proxy d) Forward Proxy Respuesta correcta: a)
+Pregunta 72: Al refirmar una app de iOS modificada, ¿qué requisito suele tener el dispositivo de pruebas? a) Tener al menos 100 GB de espacio libre b) Estar Jailbroken para anular la verificación de firma del Kernel c) Ser un dispositivo comprado hace menos de un año d) Estar conectado a una red Wi-Fi pública Respuesta correcta: b)
+Pregunta 73: Si una aplicación de producción tiene el flag 'android:debuggable=true', ¿qué riesgo asume? a) Cualquiera puede conectarse y extraer datos de su memoria b) La aplicación no funcionará en teléfonos antiguos c) La batería del dispositivo se agotará rápidamente d) Se borran automáticamente las bases de datos locales Respuesta correcta: a)
+Pregunta 74: ¿Qué característica de privacidad introdujo iOS 14.5 con el identificador IDFA? a) App Tracking Transparency (ATT) b) Secure Enclave Protection (SEP) c) Data Loss Prevention (DLP) d) Jailbreak Detection (JD) Respuesta correcta: a)
+Pregunta 75: ¿Qué garantiza el proceso de cifrar el hash del APK con la clave privada del desarrollador? a) El acceso directo a los permisos de la cámara b) El cumplimiento de la normativa GDPR europea c) La firma digital que el sistema verificará en la instalación d) La compresión ZIP para que ocupe menos espacio Respuesta correcta: c)
+Pregunta 76: En las compras In-App, ¿qué parte de la arquitectura muestra el popup de confirmación biométrica? a) El banco del usuario mediante SMS b) El servidor Backend del desarrollador c) La Tienda, es decir, Google Play o App Store d) La propia aplicación desarrollada Respuesta correcta: c)
+Pregunta 77: ¿Qué técnica del auditor busca capturar un recibo válido e introducirlo en otra transacción? a) Prueba de Compras Falsas o Stubbing b) Análisis Estático del Código c) Ofuscación Inversa d) Inyección de Recibos o Receipt Injection Respuesta correcta: d)
+Pregunta 78: ¿Cómo se denominan los archivos que permiten reconstruir el código fuente TypeScript desde el minificado JS? a) Archivos de Cabecera o .h b) Source Maps o .map c) Archivos Objeto o .o d) Archivos de Preferencias o .xml Respuesta correcta: b)
+Pregunta 79: ¿Qué modo de despliegue CASB redirige todo el tráfico del móvil mediante un perfil VPN o PAC? a) Reverse Proxy b) Modo API Asíncrono c) Modo Mirror Port d) Forward Proxy Respuesta correcta: d)
+Pregunta 80: ¿Cuál es la vulnerabilidad principal al implementar la validación de compras integradas (In-App Purchases) de forma insegura? a) Solicitar autenticación biométrica antes de iniciar el cobro. b) Realizar la comprobación del recibo de pago en el lado del cliente. c) Utilizar la librería oficial de pagos sin actualizarla. d) Almacenar los recibos de compra en la base de datos del backend. Respuesta correcta: b)
+Pregunta 81: En apps híbridas como React Native, ¿qué información útil para el atacante suele olvidarse en el código JS? a) El código fuente del sistema operativo iOS b) El certificado de firma de producción c) La base de datos SQLite completa d) Comentarios con endpoints o URLs de desarrollo Respuesta correcta: d)
+Pregunta 82: En el modelo actual de permisos de Android, los "Permisos Peligrosos" (como acceder a los contactos) se conceden automáticamente en el momento de la instalación sin preguntar al usuario. a) Falso b) Verdadero Respuesta correcta: a)
+Pregunta 83: En compras in-app, ¿cómo se le llama al ataque donde se reenvía un recibo válido múltiples veces? a) Ataque de Fuerza Bruta b) Ataque de Denegación de Servicio (DDoS) c) Ataque de Inyección SQL d) Ataque de Reproducción o Replay Attack Respuesta correcta: d)
+Pregunta 84: ¿Qué paradigma de seguridad tradicional ha destruido la irrupción del móvil y la nube? a) El modelo de Integración Continua (CI/CD) b) El modelo de Cifrado Asimétrico c) El modelo del Castillo y el Foso d) El modelo de Confianza Cero (Zero Trust) Respuesta correcta: c)
+Pregunta 85: ¿Qué riesgo de seguridad implica publicar una aplicación híbrida con los archivos "Source Maps" (.map) accesibles? a) Desactivan la verificación de firmas del sistema operativo. b) Permiten reconstruir fácilmente el código fuente original. c) Habilitan la instalación remota de aplicaciones de terceros. d) Contienen las credenciales de administrador de la base de datos. Respuesta correcta: b)
+Pregunta 86: En el ecosistema iOS, los "Entitlements" son firmas digitales dentro del binario que otorgan a la aplicación capacidades especiales del sistema, como poder utilizar Apple Pay. a) Verdadero b) Falso Respuesta correcta: a)
+Pregunta 87: Si extraemos código de Android y vemos 'a.b()', ¿qué herramienta ha utilizado el desarrollador? a) Un ofuscador como ProGuard o R8 b) Un motor de bases de datos SQLite c) Un orquestador de contenedores Docker d) Un compilador de C++ nativo Respuesta correcta: a)
+Pregunta 88: ¿Qué arquitectura de despliegue CASB se recomienda en entornos BYOD al no requerir la instalación de agentes en el móvil personal? a) Modo API (Out-of-Band) b) Reverse Proxy c) Gateway Transparente d) Forward Proxy Respuesta correcta: b)
+Pregunta 89: Técnicamente, ¿qué es un CASB? a) Una herramienta de ingeniería inversa b) Una base de datos SQLite cifrada c) Un antivirus de nueva generación para el teléfono d) Un punto de control intermedio entre usuarios y servicios en la nube Respuesta correcta: d)
+Pregunta 90: ¿Por qué no se debe cifrar campo por campo manualmente en una base de datos local? a) Porque consume toda la batería en un minuto b) Porque la base de datos no admite caracteres extraños c) Porque imposibilita realizar búsquedas SQL eficientes como LIKE d) Porque es ilegal según las normas de Apple y Google Respuesta correcta: c)
+Pregunta 91: Si el CASB detecta el renombrado masivo de archivos en OneDrive en segundos, ¿qué está mitigando? a) Un acceso no autorizado por Fuerza Bruta b) Un ataque de Ransomware en la nube c) Una fuga de datos por exfiltración USB d) Un ataque de Phishing por correo electrónico Respuesta correcta: b)
+Pregunta 92: ¿Qué nivel de cifrado aplica SQLCipher a las bases de datos SQLite? a) Cifrado AES-256 a nivel de página b) Cifrado RSA-2048 a nivel de fila c) Codificación Base64 de la tabla d) Hashing MD5 de la estructura Respuesta correcta: a)
+Pregunta 93: En los dispositivos modernos, ¿dónde se almacenan físicamente las claves criptográficas gestionadas por el Keystore o Keychain? a) En el servidor en la nube vinculado a la cuenta del sistema operativo. b) En la tarjeta de memoria SD cifrada previamente por el usuario. c) En el archivo de configuración XML dentro del contenedor de la app. d) En un entorno de ejecución confiable (TEE) o Elemento Seguro. Respuesta correcta: d)
+Pregunta 94: Antes de Android 6.0, ¿cuándo se aceptaban todos los permisos de una aplicación? a) Al reiniciar el dispositivo móvil b) Cada vez que se abría la aplicación c) Mediante un panel de configuración externo d) En el momento de la instalación, modelo todo o nada Respuesta correcta: d)
+Pregunta 95: ¿Qué fuga de información ocurre si un campo de texto no se etiqueta como 'dato sensible'? a) El teclado inteligente puede aprender y guardar palabras clave b) El Kernel publica el texto en internet c) Se envía un SMS automático al desarrollador d) La base de datos SQLite se corrompe Respuesta correcta: a)
+Pregunta 96: ¿Qué ocurre durante la interrupción de software al realizar una Syscall? a) La aplicación se cierra y se reinicia sola b) Se borran los datos del portapapeles del sistema c) El procesador se apaga durante un milisegundo d) La ejecución salta del Modo Usuario al Modo Kernel Respuesta correcta: d)
+Pregunta 97: ¿Cómo se llama el archivo central que debe declarar todos los permisos requeridos en Android? a) package.json b) AndroidManifest.xml c) Info.plist d) build.gradle Respuesta correcta: b)
+Pregunta 98: En el contexto CASB, ¿qué permite hacer el control granular en políticas BYOD? a) Leer los mensajes personales de WhatsApp del empleado b) Prohibir el uso de cualquier aplicación del sistema operativo c) Borrar completamente el disco duro del móvil personal d) Permitir acceso web pero bloquear la descarga de archivos sensibles Respuesta correcta: d)
+Pregunta 99: En iOS, ¿qué contenedor aloja el binario de la app y es de solo lectura? a) Bundle Container b) Keychain Container c) Security Enclave d) Data Container Respuesta correcta: a)
+Pregunta 100: ¿Qué entorno virtual ejecuta los procesos aislados de las aplicaciones en Android? a) Máquina Virtual Java Clásica b) ART - Android Runtime c) iOS Sandbox d) Docker Engine Respuesta correcta: b)`;
+
+    let quizData = [];
+    
+    // 2. MOTOR DE CLASIFICACIÓN (Analiza la pregunta para asignarle el apartado de la UD4)
+    function determineSection(text) {
+        text = text.toLowerCase();
+        
+        if (text.match(/casb|zero trust|byod|shadow it|proxy|viaje imposible|mdm|dlp|tokenización|castillo y el foso/)) 
+            return "4.6. Soluciones CASB";
+        
+        if (text.match(/compra|recibo|lucky patcher|in-app|onpaymentsuccess|stubbing/)) 
+            return "4.4. Compras Integradas";
+        
+        if (text.match(/firma|re-signing|provisioning profile|scheme|certificado|code signing|debug keystore/)) 
+            return "4.2. Firma y Verificación";
+        
+        if (text.match(/sqlite|sqlcipher|hardcoding|keystore|keychain|portapapeles|captura|almacenamiento|cifrado a nivel de página|encryptedsharedpreferences|proguard|ofuscación|jadx|apktool|dalvik|flag_secure/)) 
+            return "4.3. Almacenamiento Seguro";
+        
+        if (text.match(/metadato|strip|símbolo|mock|map|exif|strings|assets|ruta|binario|\.ipa|\.apk|pdf|itext|javascript|js|endpoint/)) 
+            return "4.5. Fuga de Información";
+        
+        if (text.match(/sandbox|permiso|syscall|kernel|entitlement|info\.plist|uid|llamada al sistema|art|contenedor|bundle/)) 
+            return "4.1. Modelos de Permisos";
+            
+        return "4.1. Modelos de Permisos"; // Default fallback
+    }
+
+    // 3. PARSER AUTOMÁTICO (Convierte el texto bruto en un objeto JSON dinámico)
+    function parseQuestionsText(rawText) {
+        const questionsArray = [];
+        // Cortamos el texto cada vez que encuentra "Pregunta X:"
+        const blocks = rawText.split(/(?=Pregunta \d+:)/).filter(b => b.trim().length > 0);
+        
+        blocks.forEach(block => {
+            try {
+                // Sacar enunciado
+                const qTextMatch = block.match(/Pregunta \d+:\s*(.*?)(?=\s*a\))/s);
+                if (!qTextMatch) return;
+                const questionText = qTextMatch[1].trim();
+
+                // Sacar bloque de opciones
+                const optionsBlockMatch = block.match(/(a\).*?)(?=Respuesta correcta:)/s);
+                if (!optionsBlockMatch) return;
+                const optionsText = optionsBlockMatch[1].trim();
+
+                // Sacar letra correcta
+                const answerMatch = block.match(/Respuesta correcta:\s*([a-d])/i);
+                if (!answerMatch) return;
+                const correctLetter = answerMatch[1].toLowerCase();
+
+                // Dividir y montar opciones
+                const options = [];
+                // Expresión para coger a) texto b) texto ... incluso para V/F
+                const parts = optionsText.split(/(?:\s+|^|\n)([a-d])\)\s+/i).filter(x => x.trim() !== "");
+                for (let i = 0; i < parts.length; i += 2) {
+                    const letter = parts[i].toLowerCase();
+                    const text = parts[i + 1] ? parts[i + 1].trim() : "";
+                    options.push({ text: text, correct: letter === correctLetter });
+                }
+
+                questionsArray.push({
+                    apartado: determineSection(questionText),
+                    question: questionText,
+                    options: options,
+                    feedback: "La opción correcta era la " + correctLetter.toUpperCase() + "."
+                });
+            } catch (e) {
+                console.error("Error al procesar bloque:", block);
+            }
+        });
+        return questionsArray;
+    }
+
+    // 4. ORDENACIÓN (Para que la progresión de la barra tenga sentido)
+    const orderMap = {
+        "4.1. Modelos de Permisos": 1,
+        "4.2. Firma y Verificación": 2,
+        "4.3. Almacenamiento Seguro": 3,
+        "4.4. Compras Integradas": 4,
+        "4.5. Fuga de Información": 5,
+        "4.6. Soluciones CASB": 6
+    };
+
+    // --- INICIALIZACIÓN DE LA APP ---
+    quizData = parseQuestionsText(rawQuestionsText);
+    quizData.sort((a, b) => orderMap[a.apartado] - orderMap[b.apartado]);
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    const questionTextElement = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackBox = document.getElementById('feedback-box');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreElement = document.getElementById('score');
+    const progressText = document.getElementById('progress-text');
+    const quizContent = document.getElementById('quiz-content');
+    const endScreen = document.getElementById('end-screen');
+    const letters = ['A', 'B', 'C', 'D'];
+
+    function renderSectionProgress() {
+        const progressContainer = document.getElementById('section-progress');
+        progressContainer.innerHTML = ''; 
+        
+        // Coger nombres de apartados que existan, ordenados
+        const sections = [...new Set(quizData.map(q => q.apartado))];
+        const currentSection = quizData[currentQuestionIndex].apartado;
+
+        sections.forEach(sec => {
+            const badge = document.createElement('span');
+            badge.className = 'section-badge';
+            if (sec === currentSection) badge.classList.add('active');
+            badge.innerText = sec; 
+            progressContainer.appendChild(badge);
+        });
+    }
+
+    function loadQuestion() {
+        feedbackBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        
+        renderSectionProgress();
+        
+        const currentData = quizData[currentQuestionIndex];
+        progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+        questionTextElement.innerText = currentData.question;
+        
+        currentData.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<strong>${letters[index]})</strong> ${option.text}`;
+            btn.onclick = () => selectAnswer(btn, option.correct, currentData.feedback);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedBtn, isCorrect, feedbackHtml) {
+        const allButtons = optionsContainer.querySelectorAll('.option-btn');
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if(isCorrect) {
+            selectedBtn.classList.add('correct');
+            score++;
+            scoreElement.innerText = score;
+            feedbackBox.innerHTML = `<strong>¡Muy bien! ¡Acierto!</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-correct';
+        } else {
+            selectedBtn.classList.add('incorrect');
+            allButtons.forEach(btn => {
+                const btnData = quizData[currentQuestionIndex].options.find(o => btn.innerHTML.includes(o.text));
+                if(btnData && btnData.correct) btn.classList.add('correct');
+            });
+            feedbackBox.innerHTML = `<strong>Respuesta incorrecta.</strong><br><br>${feedbackHtml}`;
+            feedbackBox.className = 'feedback-incorrect';
+        }
+        
+        feedbackBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+        setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if(currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            quizContent.style.display = 'none';
+            endScreen.style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-questions-text').innerText = quizData.length;
+        }
+    }
+
+    // Iniciar cuando todo esté listo
+    window.onload = () => {
+        if (quizData.length > 0) {
+            loadQuestion();
+        } else {
+            questionTextElement.innerText = "Error cargando las preguntas. Revisa el script.";
+        }
+    };
+</script>
+
+</body>
+</html>
