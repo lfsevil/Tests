@@ -21,7 +21,6 @@
         width: 100%;
     }
 
-    /* --- CABECERA DEL CURSO --- */
     .course-header {
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         color: white;
@@ -30,142 +29,37 @@
         margin-bottom: 25px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     }
-    .course-header h1 { 
-        font-size: 22px; 
-        margin: 0 0 10px 0; 
-        color: #f8b400; 
-        line-height: 1.3;
-    }
-    .course-header h3 { 
-        margin: 0 0 5px 0; 
-        font-size: 18px; 
-        font-weight: 500; 
-    }
-    .course-header h4 { 
-        margin: 0 0 15px 0; 
-        font-size: 16px; 
-        font-weight: 400; 
-        opacity: 0.9; 
-    }
-    .course-header p { 
-        margin: 0; 
-        font-size: 15px; 
-        background: rgba(255,255,255,0.15); 
-        display: inline-block; 
-        padding: 6px 14px; 
-        border-radius: 20px;
-        font-weight: bold;
-    }
+    .course-header h1 { font-size: 22px; margin: 0 0 10px 0; color: #f8b400; line-height: 1.3; }
+    .course-header h3 { margin: 0 0 5px 0; font-size: 18px; font-weight: 500; }
+    .course-header h4 { margin: 0 0 15px 0; font-size: 16px; font-weight: 400; opacity: 0.9; }
+    .course-header p { margin: 0; font-size: 15px; background: rgba(255,255,255,0.15); display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: bold; }
 
-    /* --- CONTENEDOR DEL QUIZ --- */
-    #quiz-container { 
-        background: #ffffff; 
-        padding: 30px 40px; 
-        border-radius: 12px; 
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
-    }
+    #quiz-container { background: #ffffff; padding: 30px 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
     h2 { margin-top: 0; color: #2c3e50; font-size: 20px; line-height: 1.4; }
     
-    /* --- BARRA DE PROGRESO DE APARTADOS --- */
-    #section-progress {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 25px;
-        justify-content: center;
-        padding: 15px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-    }
-    .section-badge {
-        background-color: #e9ecef;
-        color: #6c757d;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        opacity: 0.6;
-    }
-    .section-badge.active {
-        background-color: #28a745;
-        color: white;
-        opacity: 1;
-        box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3);
-        transform: scale(1.05);
-    }
+    #section-progress { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; justify-content: center; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .section-badge { background-color: #e9ecef; color: #6c757d; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; transition: all 0.3s ease; opacity: 0.6; }
+    .section-badge.active { background-color: #28a745; color: white; opacity: 1; box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3); transform: scale(1.05); }
 
-    /* --- HEADER DE PREGUNTA Y PUNTUACIÓN --- */
-    .header-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-    .score-badge {
-        background: #007bff;
-        color: white;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 16px;
-    }
+    .header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
+    .score-badge { background: #007bff; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 16px; }
     .progress-text { font-size: 15px; color: #7f8c8d; font-weight: bold; }
     
-    /* --- BOTONES DE OPCIONES --- */
-    .option-btn { 
-        display: block; 
-        width: 100%; 
-        padding: 15px; 
-        margin: 12px 0; 
-        border: 2px solid #e0e0e0; 
-        border-radius: 8px; 
-        background: #fff; 
-        cursor: pointer; 
-        text-align: left; 
-        font-size: 16px; 
-        transition: all 0.2s ease; 
-        color: #444;
-    }
+    .option-btn { display: block; width: 100%; padding: 15px; margin: 12px 0; border: 2px solid #e0e0e0; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 16px; transition: all 0.2s ease; color: #444; }
     .option-btn:hover { background: #f8f9fa; border-color: #b0bec5; }
     .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
     
     .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; font-weight: bold;}
     .incorrect { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
     
-    /* --- CAJA DE FEEDBACK --- */
-    #feedback-box { 
-        margin-top: 25px; 
-        padding: 15px 20px; 
-        border-radius: 8px; 
-        display: none; 
-        font-size: 15px;
-        line-height: 1.5;
-    }
+    #feedback-box { margin-top: 25px; padding: 15px 20px; border-radius: 8px; display: none; font-size: 15px; line-height: 1.5; }
     .feedback-correct { background: #e2f3e5; border-left: 5px solid #28a745; color: #1e7e34; }
     .feedback-incorrect { background: #fbe6e8; border-left: 5px solid #dc3545; color: #b11f2c; }
     
-    /* --- BOTÓN SIGUIENTE --- */
-    #next-btn { 
-        display: none; 
-        margin-top: 25px; 
-        padding: 12px 25px; 
-        background: #2c3e50; 
-        color: white; 
-        border: none; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-size: 16px; 
-        font-weight: bold;
-        float: right;
-    }
+    #next-btn { display: none; margin-top: 25px; padding: 12px 25px; background: #2c3e50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; float: right; }
     #next-btn:hover { background: #1a252f; }
     .clearfix::after { content: ""; clear: both; display: table; }
     
-    /* --- PANTALLA FINAL --- */
     #end-screen { text-align: center; display: none; padding: 20px; }
     #end-screen h1 { color: #28a745; font-size: 36px; }
     #end-screen p { font-size: 18px; color: #555; }
@@ -210,22 +104,22 @@
 </div>
 
 <script>
-    // 1. BASE DE DATOS CRUDA INYECTADA
+    // 1. BASE DE DATOS INYECTADA CON LAS 100 PREGUNTAS ACTUALIZADAS (UD4)
     const rawQuestionsText = `Pregunta 1: ¿Qué son los Playbooks o SOP en un Centro de Operaciones de Seguridad? a) Procedimientos técnicos detallados de actuación. b) Políticas genéricas de recursos humanos locales. c) Algoritmos de cifrado para redes corporativas. d) Manuales de instalación de hardware periférico. Respuesta correcta: a
 Pregunta 2: El marco de referencia mundial para la gestión de incidentes del NIST es: a) NIST SP 800-53 b) NIST SP 800-61 c) NIST SP 800-30 d) NIST SP 800-37 Respuesta correcta: b
 Pregunta 3: La gestión de incidentes es puramente técnica y no requiere gobernanza directiva. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 4: ¿Qué significan las siglas CSIRT en la gestión de incidentes de seguridad? a) Cyber Security Internal Recovery Tool b) Computer Security Incident Response Team c) Central System Intelligence Response Team d) Cyber System Incident Recovery Technique Respuesta correcta: b
 Pregunta 5: ¿Cuál es el objetivo estratégico de reducir el MTTR en un incidente? a) Aumentar la visibilidad de marketing. b) Reducir el tiempo de descanso del SOC. c) Minimizar el daño económico y de datos. d) Eliminar los falsos positivos de la red. Respuesta correcta: c
-Pregunta 6: El "Jump Bag" o kit de respuesta debe depender siempre de la red corporativa. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 6: ¿Qué es el "Jump Bag" en la fase de preparación de incidentes? a) Un servidor honeypot para atraer a los atacantes. b) Un sistema SIEM configurado en la nube corporativa. c) Un kit de herramientas aislado de la red principal. d) Un manual impreso de políticas de seguridad física. Respuesta correcta: c
 Pregunta 7: ¿Qué es un "Tabletop Exercise" en la fase de preparación? a) Una prueba de penetración en red real. b) Un ejercicio de mesa con directivos. c) Un volcado de memoria RAM automatizado. d) Una copia de seguridad física en disco. Respuesta correcta: b
 Pregunta 8: ¿Qué busca determinar la fase de detección e identificación inicialmente? a) Si un evento anómalo es un incidente real. b) El coste económico exacto del ataque. c) El nombre real del atacante externo. d) La sentencia legal aplicable al caso. Respuesta correcta: a
 Pregunta 9: ¿Qué herramienta se asocia a la detección basada en host? a) Cortafuegos perimetral. b) Soluciones EDR / XDR. c) Sistemas NIDS / IPS. d) Analizador Wireshark. Respuesta correcta: b
 Pregunta 10: En el triaje de alertas, ¿cuál es el primer paso del analista? a) Formatear los equipos. b) Denunciar a la policía. c) Aislar el segmento de red. d) Validar un falso positivo. Respuesta correcta: d
 Pregunta 11: En un incidente, el "Paciente Cero" se refiere al primer equipo comprometido por el atacante. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 12: ¿Qué es una medida de contención a corto plazo según el NIST? a) Mover un servidor a cuarentena monitoreada. b) Desconectar inmediatamente el cable de red. c) Realizar una auditoría completa del sistema. d) Actualizar el plan de continuidad del negocio. Respuesta correcta: b
-Pregunta 13: El DNS Sinkholing se utiliza para redirigir el tráfico malicioso a una IP controlada por la empresa. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 14: ¿Cuál es un argumento principal para NO apagar un equipo infectado? a) Se pierde la evidencia almacenada en la RAM. b) Aumenta la velocidad del procesador interno. c) Se detiene la copia de seguridad programada. d) Consume demasiada energía eléctrica de golpe. Respuesta correcta: a
-Pregunta 15: La fase de mitigación y erradicación tiene como objetivo final: a) Denunciar el ataque ante la prensa local. b) Borrar las copias de seguridad afectadas. c) Eliminar el componente y cerrar la brecha. d) Apagar definitivamente el servidor dañado. Respuesta correcta: c
+Pregunta 12: Según el NIST, ¿cuál de las siguientes es una acción de "contención a largo plazo"? a) Desconectar físicamente el cable de red del equipo. b) Mover el servidor afectado a una VLAN de cuarentena. c) Apagar inmediatamente el servidor comprometido. d) Bloquear una IP específica en el firewall perimetral. Respuesta correcta: b
+Pregunta 13: ¿Cuál es el objetivo del "DNS Sinkholing" durante una contención? a) Bloquear los correos electrónicos de suplantación de identidad. b) Redirigir el tráfico del malware a una IP controlada por la empresa. c) Cifrar las comunicaciones del servidor de base de datos crítico. d) Deshabilitar temporalmente la resolución de nombres externa. Respuesta correcta: b
+Pregunta 14: Desconectar físicamente el cable de red de un equipo infectado es considerado una estrategia de contención a corto plazo. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 15: En la fase de "Mitigación y Erradicación", ¿cuál es una acción prioritaria? a) Desconectar el equipo infectado de la red corporativa. b) Restaurar los datos desde la última copia de seguridad. c) Realizar una adquisición de la memoria RAM del equipo. d) Instalar parches de seguridad y eliminar binarios maliciosos. Respuesta correcta: d
 Pregunta 16: El concepto de Hardening o bastionado consiste principalmente en: a) Aumentar la velocidad del disco duro. b) Reducir la superficie de exposición. c) Instalar software de diseño gráfico. d) Multiplicar el número de usuarios. Respuesta correcta: b
 Pregunta 17: La reinstalación Bare Metal implica formatear y reinstalar desde cero el sistema operativo. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 18: La recuperación desde copias de seguridad exige una condición vital: a) Validar que el backup esté totalmente limpio. b) Realizarla en horario de oficina únicamente. c) Usar discos duros de marca específica siempre. d) Notificar previamente al atacante externo. Respuesta correcta: a
@@ -244,12 +138,12 @@ Pregunta 30: ¿A quién va dirigido principalmente un Resumen Ejecutivo post-inc
 Pregunta 31: ¿Qué define exactamente la ciberresiliencia en una organización? a) Evitar que los incidentes ocurran bajo cualquier costo económico. b) Capacidad de resistir, adaptarse y recuperarse de un ataque. c) Comprar el mejor software antivirus del mercado informático. d) Contratar a los mejores abogados para evitar cualquier demanda. Respuesta correcta: b
 Pregunta 32: El modelo de madurez CERT-RMM evalúa 26 áreas de proceso de resiliencia. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 33: ¿Qué significan las siglas RTO en la métrica de ciberresiliencia? a) Recovery Time Objective b) Random Threat Operation c) Real Time Observation d) Recovery Testing Output Respuesta correcta: a
-Pregunta 34: ¿Qué define el parámetro RPO (Recovery Point Objective)? a) El presupuesto máximo asignado a ciberseguridad. b) La cantidad de servidores físicos en la empresa. c) La pérdida de datos tolerable medida en tiempo. d) El tiempo que tarda el antivirus en actualizarse. Respuesta correcta: c
+Pregunta 34: ¿Qué define la métrica RPO (Recovery Point Objective)? a) El tiempo máximo tolerable de pérdida de datos. b) El tiempo máximo para restablecer un servicio afectado. c) El tiempo medio necesario para detectar un ciberataque. d) El tiempo máximo que la empresa sobrevive sin servicio. Respuesta correcta: a
 Pregunta 35: El MTPD es el tiempo máximo que una organización sobrevive a una interrupción técnica. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 36: El RTO de un servicio crítico debe ser siempre mayor que su MTPD. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 36: Para que una empresa pueda sobrevivir a un desastre, el RTO (Recovery Time Objective) debe ser estrictamente menor que el MTPD (Maximum Tolerable Period of Disruption). a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 37: ¿Qué estrategia de recuperación DRP garantiza un RPO igual a cero? a) Hot Site remoto. b) Cold Site vacío. c) Mirroring en espejo. d) Warm Site parcial. Respuesta correcta: c
-Pregunta 38: Un Cold Site es una sala acondicionada físicamente, pero que carece de servidores instalados. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 39: ¿Cuál es el objetivo principal del Análisis de Impacto de Negocio (BIA)? a) Comprar equipos de red modernos y eficientes. b) Determinar qué procesos son críticos o vitales. c) Despedir al personal técnico menos cualificado. d) Mejorar el diseño gráfico de las webs internas. Respuesta correcta: b
+Pregunta 38: En un plan de recuperación (DRP), ¿qué es un "Cold Site"? a) Un centro con hardware configurado y datos sincronizados. b) Un entorno en la nube con replicación de datos continua. c) Un espacio físico acondicionado pero sin servidores preinstalados. d) Un centro de respaldo con servidores pero sin los datos volcados. Respuesta correcta: c
+Pregunta 39: El Análisis de Impacto de Negocio (BIA) debe realizarse después de ocurrir un incidente para calcular las pérdidas reales. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 40: ¿Qué proporciona la redundancia de comunicaciones en alta disponibilidad? a) Dos monitores para cada empleado de oficina. b) Dos proveedores de Internet con rutas distintas. c) Dos teclados en el servidor principal de la red. d) Dos antivirus instalados en el mismo servidor. Respuesta correcta: b
 Pregunta 41: La norma ISO internacional de referencia para el SGCN es: a) ISO 27001 b) ISO 22301 c) ISO 9001 d) ISO 31000 Respuesta correcta: b
 Pregunta 42: Las siglas PDCA del ciclo de mejora continua en resiliencia significan: a) Program, Deploy, Create, Analyze. b) Plan, Do, Check, Act. c) Prevent, Detect, Contain, Assess. d) Provide, Defend, Control, Audit. Respuesta correcta: b
@@ -257,20 +151,20 @@ Pregunta 43: Una prueba "Tabletop" implica desconectar servidores de producción
 Pregunta 44: En el modelo de nube IaaS, el cliente gestiona aplicaciones y datos, y el proveedor el hardware. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 45: El "Derecho de Auditoría" (Right to Audit) permite a la organización: a) Pedir dinero prestado al banco. b) Borrar datos del proveedor remoto. c) Inspeccionar controles del proveedor. d) Cancelar contratos sin previo aviso. Respuesta correcta: c
 Pregunta 46: La Gestión de Crisis tiene un enfoque principalmente estratégico y político, no solo técnico. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 47: ¿A qué se refiere el concepto de "Golden Hour" en comunicación de crisis? a) A los primeros 60 minutos para establecer la narrativa. b) A la hora de salida de los empleados de la oficina. c) A la medianoche, cuando el tráfico de red es menor. d) Al tiempo máximo permitido para realizar un backup. Respuesta correcta: a
+Pregunta 47: En la gestión de crisis, ¿a qué hace referencia la "Hora de Oro"? a) Al tiempo máximo legal para avisar a las autoridades. b) A los primeros 60 minutos para establecer la narrativa oficial. c) Al periodo estimado para erradicar el malware del sistema. d) A la primera hora de monitorización tras restaurar un servicio. Respuesta correcta: b
 Pregunta 48: Pagar o no pagar un rescate de ransomware se considera una decisión de crisis de alto nivel. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 49: El líder técnico (CISO) traduce el estado del incidente al lenguaje de negocio en el Comité. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 50: En SaaS, el cliente es responsable del mantenimiento del sistema operativo del servidor. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 51: ¿Qué indicador (KPI) mide el tiempo medio que tarda la empresa en descubrir un compromiso? a) MTTR b) RTO c) MTTD d) RPO Respuesta correcta: c
 Pregunta 52: La política de continuidad del negocio debe ser aprobada siempre por la junta directiva. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 53: Un Hot Site requiere semanas de configuración antes de estar operativo ante un desastre. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 53: Un centro de respaldo activo (Hot Site) se caracteriza por tener la infraestructura encendida y los datos sincronizados casi en tiempo real con la sede principal. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 54: La gestión de incidentes en terceras partes incluye los servicios gestionados MSSP. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 55: Paralizar completamente la producción en una fábrica es una decisión técnica que toma el Nivel 1. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 56: ¿Qué es el escalado técnico en la gestión de incidentes de seguridad? a) Aumentar la velocidad de los discos duros locales. b) Subir el salario a los técnicos de soporte básicos. c) Pasar el problema a un equipo con mayor capacidad. d) Desconectar equipos para ahorrar energía eléctrica. Respuesta correcta: c
 Pregunta 57: El Nivel 1 del SOC (Triage) es el encargado de realizar la ingeniería inversa del malware. a) Verdadero b) Falso Respuesta correcta: b
-Pregunta 58: El impacto económico es uno de los criterios clave para realizar un escalado jerárquico. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 59: Si la red corporativa está comprometida, la comunicación técnica interna debe realizarse: a) Por el correo electrónico de la propia empresa. b) Usando mensajería externa fuera de banda. c) A través de la intranet corporativa habitual. d) Mediante señales de humo en la sede central. Respuesta correcta: b
-Pregunta 60: ¿Qué etiqueta del Traffic Light Protocol prohíbe compartir información fuera de la sala? a) TLP:CLEAR b) TLP:GREEN c) TLP:AMBER d) TLP:RED Respuesta correcta: d
+Pregunta 58: ¿Qué situación justifica un "escalado jerárquico" (administrativo) inmediato? a) El equipo técnico necesita herramientas de ingeniería inversa. b) Se detecta un falso positivo en el sistema de monitorización. c) Falla el proceso de restauración de una copia de seguridad local. d) Se confirma el compromiso de datos personales de los clientes. Respuesta correcta: d
+Pregunta 59: Si la red está comprometida, ¿qué canal es seguro para coordinar al Comité de Crisis? a) El sistema de correo electrónico corporativo habitual de la empresa. b) La herramienta de chat interna instalada en los equipos de escritorio. c) Aplicaciones de mensajería cifrada independientes de la red corporativa. d) El portal de la intranet dedicado a la gestión de recursos humanos. Respuesta correcta: c
+Pregunta 60: ¿Cuál es la función principal del protocolo TLP (Traffic Light Protocol)? a) Automatizar la detección de amenazas en el firewall. b) Compartir indicadores de compromiso entre máquinas. c) Cifrar las comunicaciones del equipo de respuesta a incidentes. d) Limitar la distribución de información sobre un incidente. Respuesta correcta: d
 Pregunta 61: TLP:CLEAR indica que la información del incidente puede hacerse pública libremente. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 62: Según el RGPD, ¿cuál es el plazo máximo para notificar a la AEPD una fuga de datos personales? a) 24 horas b) 72 horas c) 15 días d) 30 días Respuesta correcta: b
 Pregunta 63: El INCIBE-CERT es el CSIRT de referencia en España para entidades del sector público. a) Verdadero b) Falso Respuesta correcta: b
@@ -278,14 +172,14 @@ Pregunta 64: Para denunciar un sabotaje ante las Fuerzas de Seguridad, es requis
 Pregunta 65: ¿Para qué sirve la plataforma LUCIA del CCN-CERT? a) Para coordinar y reportar incidentes del ENS. b) Para cifrar correos electrónicos del personal. c) Para realizar copias de seguridad en la nube. d) Para auditar la facturación de la organización. Respuesta correcta: a
 Pregunta 66: La comunicación externa durante un incidente excluye totalmente a los proveedores y partners. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 67: Un incidente catalogado como "Crítico" escala de forma automática al CISO o Comité de Crisis. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 68: TLP:AMBER permite compartir la información con cualquier persona de la comunidad del sector. a) Verdadero b) Falso Respuesta correcta: b
+Pregunta 68: Según el protocolo TLP, la información etiquetada como TLP:GREEN puede publicarse libremente en foros públicos y redes sociales. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 69: El escalado funcional se produce cuando falta autoridad legal para tomar la decisión. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 70: La Policía Nacional (CIBER) o la Guardia Civil (GDT) reciben las denuncias formales. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 71: ¿Qué técnica se recomienda tras un ataque severo de ransomware de privilegios? a) Desinfectar archivos con un antivirus casero. b) Reinstalación Bare Metal desde Gold Images. c) Limpiar la papelera de reciclaje localmente. d) Cambiar únicamente la contraseña de acceso. Respuesta correcta: b
 Pregunta 72: El software FIM se emplea para verificar la integridad de los archivos restaurados. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 73: En la secuenciación de restablecimiento, ¿qué capa debe activarse en primer lugar? a) Capa de Aplicación b) Capa Frontend Web c) Capa de Infraestructura d) Capa de Base de Datos Respuesta correcta: c
+Pregunta 73: En la secuenciación del restablecimiento, ¿qué capa debe recuperarse en primer lugar? a) La capa de presentación y el acceso externo. b) La capa de aplicación y servicios de mensajería. c) La capa de datos (bases de datos SQL/NoSQL). d) La capa de infraestructura y Core-Network (DNS, DHCP). Respuesta correcta: d
 Pregunta 74: La capa de Presentación y Acceso Externo (Frontend) es siempre la última en restablecerse. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 75: ¿Qué significa "Egress Filtering" durante la reintegración de la red? a) Permitir la entrada libre de correos electrónicos. b) Bloquear todos los puertos USB de los ordenadores. c) Limitar el tráfico que los servidores envían a Internet. d) Borrar los registros antiguos del firewall perimetral. Respuesta correcta: c
+Pregunta 75: ¿Por qué es crucial establecer un "Egress Filtering" al restablecer un servidor? a) Para impedir que los atacantes externos accedan a la red interna. b) Para priorizar el ancho de banda para los servicios de recuperación. c) Para evitar que el malware latente contacte con su servidor de control. d) Para bloquear el acceso de los empleados a sitios web no autorizados. Respuesta correcta: c
 Pregunta 76: Es altamente recomendable exigir autenticación multifactor (MFA) a accesos de terceros. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 77: ¿Qué certifican las pruebas UAT (User Acceptance Testing) tras la recuperación? a) Que la red está protegida contra ataques externos. b) Que las aplicaciones funcionan y los datos son correctos. c) Que el firewall perimetral bloquea IPs maliciosas. d) Que los usuarios saben usar el nuevo sistema operativo. Respuesta correcta: b
 Pregunta 78: El Pentesting Dirigido intenta explotar el vector de ataque original tras la recuperación. a) Verdadero b) Falso Respuesta correcta: a
@@ -294,17 +188,17 @@ Pregunta 80: Restablecer servicios no implica solo encender equipos, sino valida
 Pregunta 81: El registro cronológico de actuaciones en un incidente es conocido técnicamente como: a) Audit Trail b) Backup Register c) Forensic Dump d) Master Image Respuesta correcta: a
 Pregunta 82: Asignar un "Escriba" durante un incidente evita que los analistas pierdan tiempo documentando. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 83: ¿Qué tipo de informe omite los detalles técnicos profundos y va a la alta dirección? a) Informe Forense b) Informe Ejecutivo c) Informe Post-Mortem d) Informe de Red Respuesta correcta: b
-Pregunta 84: El informe Post-Mortem incluye el mapeo MITRE ATT&CK y el análisis de la causa raíz. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 84: ¿A quién va dirigido principalmente el Informe Técnico Post-Incidente (Post-Mortem)? a) Al equipo de seguridad y tecnologías de la información. b) Al comité de dirección y responsables ejecutivos de la empresa. c) A los medios de comunicación y clientes afectados por el ataque. d) A las fuerzas y cuerpos de seguridad para iniciar acciones legales. Respuesta correcta: a
 Pregunta 85: Un informe forense resulta prescindible si el caso de ciberseguridad se lleva a un juicio legal. a) Verdadero b) Falso Respuesta correcta: b
-Pregunta 86: El principio "Need to Know" restringe el acceso a la documentación sensible de incidentes. a) Verdadero b) Falso Respuesta correcta: a
+Pregunta 86: El principio "Need to Know" restringe el acceso a la documentation sensible de incidentes. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 87: La documentación del plan de respuesta debe estar disponible en un entorno "fuera de banda". a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 88: ¿Qué función cumple la Base de Conocimiento (Knowledge Base) post-incidente? a) Estandarizar soluciones para problemas futuros. b) Guardar contraseñas antiguas de la plantilla. c) Borrar los registros del firewall del mes anterior. d) Denunciar a los empleados menos productivos. Respuesta correcta: a
 Pregunta 89: Los incidentes documentados no deben utilizarse para recalcular el Análisis de Riesgos. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 90: Cualquier error detectado en un Playbook durante la crisis debe corregirse en el Post-Mortem. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 91: En el contexto de un SOC, ¿qué es el proceso de "Tuning" tras un incidente? a) Traducir hallazgos en nuevas alertas en el SIEM. b) Actualizar la memoria RAM de todos los servidores. c) Mejorar la estética visual de las pantallas de alerta. d) Despedir al analista que permitió que entrara el ataque. Respuesta correcta: a
 Pregunta 92: Las plataformas SOAR se utilizan para ejecutar de forma manual procesos forenses lentos. a) Verdadero b) Falso Respuesta correcta: b
-Pregunta 93: El Threat Hunting proactivo busca indicadores de compromiso latentes en la infraestructura. a) Verdadero b) Falso Respuesta correcta: a
-Pregunta 94: ¿Qué son las plataformas MISP en inteligencia de amenazas? a) Bases de datos locales de clientes y facturación. b) Plataformas seguras para compartir IoCs con terceros. c) Programas de mensajería instantánea para empleados. d) Antivirus instalados en los ordenadores de dirección. Respuesta correcta: b
+Pregunta 93: ¿En qué consiste la técnica de "Threat Hunting" post-incidente? a) En configurar nuevas reglas de bloqueo en el firewall perimetral. b) En buscar proactivamente amenazas latentes en la infraestructura. c) En automatizar la respuesta a incidentes mediante plataformas SOAR. d) En evaluar el nivel de concienciación en ciberseguridad del personal. Respuesta correcta: b
+Pregunta 94: ¿Para qué se utiliza la plataforma MISP en la ciberresiliencia? a) Para gestionar los tickets de soporte del equipo informático. b) Para intercambiar indicadores de compromiso de forma estandarizada. c) Para reportar incidentes legalmente a protección de datos. d) Para analizar el tráfico de red en busca de anomalías en tiempo real. Respuesta correcta: b
 Pregunta 95: Los estándares STIX y TAXII se usan para automatizar el intercambio de inteligencia. a) Verdadero b) Falso Respuesta correcta: a
 Pregunta 96: Los ISACs son grupos de WhatsApp donde los hackers comparten técnicas maliciosas. a) Verdadero b) Falso Respuesta correcta: b
 Pregunta 97: Si un ataque materializa un riesgo considerado "Improbable", se debe revisar el Análisis de Riesgos. a) Verdadero b) Falso Respuesta correcta: a
@@ -314,19 +208,19 @@ Pregunta 100: El seguimiento cierra el ciclo PDCA analizando estructuralmente po
 
     let quizData = [];
     
-    // 2. MOTOR DE CLASIFICACIÓN (Analiza la pregunta para asignarle el apartado de la UD4)
+    // 2. MOTOR DE CLASIFICACIÓN ADAPTADO PARA LA UD4
     function determineSection(text) {
         text = text.toLowerCase();
         if (text.match(/soc|tuning|soar|hunting|misp|stix|taxii|isac|prevención|pdca/)) return "4.6. Prevención Futura";
         if (text.match(/informe|escriba|audit trail|custodia|post-mortem|knowledge base|documentación/)) return "4.5. Documentación";
-        if (text.match(/bare metal|gold image|fim|egress|qa|uat|pentesting dirigido|hiper-vigilancia|restablecimiento/)) return "4.4. Restablecimiento";
-        if (text.match(/escalado|tlp|aepd|lucia|notificación|comunicación externa/)) return "4.3. Flujos y Escalado";
-        if (text.match(/ciberresiliencia|rto|rpo|mtpd|bcp|bia|drp|mirroring|sgcn|pdca|crisis|terceras partes/)) return "4.2. Ciberresiliencia";
-        if (text.match(/playbook|sop|csirt|cert|mttr|jump bag|paciente cero|sinkholing|erradicación|lecciones aprendidas|nist/)) return "4.1. Procedimientos";
+        if (text.match(/bare metal|gold image|fim|egress|qa|uat|pentesting dirigido|hiper-vigilancia|restablecimiento|secuenciación/)) return "4.4. Restablecimiento";
+        if (text.match(/escalado|tlp|aepd|lucia|notificación|comunicación externa|out-of-band|fuera de banda/)) return "4.3. Flujos y Escalado";
+        if (text.match(/ciberresiliencia|rto|rpo|mtpd|bcp|bia|drp|mirroring|sgcn|crisis|terceras partes|cold site|hot site|hora de oro/)) return "4.2. Ciberresiliencia";
+        if (text.match(/playbook|sop|csirt|cert|mttr|jump bag|paciente cero|sinkholing|erradicación|lecciones aprendidas|nist|contención/)) return "4.1. Procedimientos";
         return "4.1. Procedimientos"; // Fallback por defecto
     }
 
-    // 3. PARSER AUTOMÁTICO (Convierte el texto bruto en un objeto JSON dinámico)
+    // 3. PARSER AUTOMÁTICO
     function parseQuestionsText(rawText) {
         const questionsArray = [];
         const blocks = rawText.split(/(?=Pregunta \d+:)/).filter(b => b.trim().length > 0);
@@ -370,7 +264,7 @@ Pregunta 100: El seguimiento cierra el ciclo PDCA analizando estructuralmente po
         return questionsArray;
     }
 
-    // 4. ORDENACIÓN (Para que la progresión de la barra tenga sentido lógico)
+    // 4. ORDENACIÓN (Progresión de la barra)
     const orderMap = {
         "4.1. Procedimientos": 1,
         "4.2. Ciberresiliencia": 2,
