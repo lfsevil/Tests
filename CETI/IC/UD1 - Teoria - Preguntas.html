@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Interactivo - UD1 Prevención y Concienciación</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #eef2f3;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 15px 40px;
+        margin: 0;
+    }
+
+    .main-wrapper {
+        max-width: 840px;
+        width: 100%;
+    }
+
+    .course-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 24px 30px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .course-header h1 {
+        font-size: 22px;
+        margin: 0 0 8px 0;
+        color: #f8b400;
+        line-height: 1.3;
+    }
+    .course-header h3 {
+        margin: 0 0 4px 0;
+        font-size: 17px;
+        font-weight: 500;
+    }
+    .course-header h4 {
+        margin: 0 0 14px 0;
+        font-size: 15px;
+        font-weight: 400;
+        opacity: 0.92;
+    }
+    .header-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .prof-pill {
+        margin: 0;
+        font-size: 14px;
+        background: rgba(255,255,255,0.16);
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+    .course-year {
+        font-size: 13px;
+        opacity: 0.85;
+    }
+
+    /* Barra de modos de estudio */
+    .mode-bar {
+        background: #ffffff;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .mode-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .mode-btn {
+        padding: 8px 14px;
+        border: 2px solid #d0d7de;
+        background: #f8f9fa;
+        color: #2c3e50;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .mode-btn:hover {
+        border-color: #2a5298;
+        background: #eef4ff;
+    }
+    .mode-btn.active {
+        background: #1e3c72;
+        color: #ffffff;
+        border-color: #1e3c72;
+    }
+    .mode-btn.exam-btn.active {
+        background: #d97706;
+        border-color: #d97706;
+        color: #fff;
+    }
+    .shuffle-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #555;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    #quiz-container {
+        background: #ffffff;
+        padding: 28px 34px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    #section-progress {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+        justify-content: center;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    .section-badge {
+        background-color: #e9ecef;
+        color: #5a626a;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+    .section-badge:hover {
+        border-color: #2a5298;
+        color: #1e3c72;
+        background-color: #e6eefc;
+    }
+    .section-badge.active {
+        background-color: #28a745;
+        color: white;
+        box-shadow: 0 3px 6px rgba(40, 167, 69, 0.28);
+    }
+
+    .progress-bar-wrap {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 16px;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #1e3c72, #28a745);
+        transition: width 0.3s ease;
+    }
+
+    .header-info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    .progress-text { font-size: 15px; color: #5f6c7b; font-weight: 700; }
+    .stats-group {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .score-badge {
+        background: #0d6efd;
+        color: white;
+        padding: 6px 13px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+    .wrong-badge {
+        background: #dc3545;
+        color: white;
+        padding: 6px 13px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+    .timer-badge {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+        display: none;
+    }
+
+    .question-meta {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #2a5298;
+        margin-bottom: 6px;
+    }
+    h2 {
+        margin-top: 0;
+        margin-bottom: 18px;
+        color: #1f2d3d;
+        font-size: 19px;
+        line-height: 1.45;
+    }
+
+    .option-btn {
+        display: block;
+        width: 100%;
+        padding: 14px 16px;
+        margin: 10px 0;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+        text-align: left;
+        font-size: 15.5px;
+        line-height: 1.4;
+        transition: all 0.18s ease;
+        color: #333;
+    }
+    .option-btn:hover:not(:disabled) {
+        background: #f4f7fb;
+        border-color: #2a5298;
+    }
+    .option-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.9;
+    }
+
+    .correct {
+        background: #d4edda !important;
+        border-color: #28a745 !important;
+        color: #155724 !important;
+        font-weight: 600;
+    }
+    .incorrect {
+        background: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24 !important;
+    }
+
+    #feedback-box {
+        margin-top: 20px;
+        padding: 14px 18px;
+        border-radius: 8px;
+        display: none;
+        font-size: 14.5px;
+        line-height: 1.5;
+    }
+    .feedback-correct {
+        background: #e6f4ea;
+        border-left: 5px solid #28a745;
+        color: #155724;
+    }
+    .feedback-incorrect {
+        background: #fdecea;
+        border-left: 5px solid #dc3545;
+        color: #842029;
+    }
+
+    .action-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 22px;
+        gap: 10px;
+    }
+    .kbd-hint {
+        font-size: 12px;
+        color: #8c98a4;
+    }
+    .primary-btn {
+        padding: 11px 22px;
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: background 0.2s ease;
+    }
+    .primary-btn:hover { background: #1a252f; }
+    .retry-wrong-btn {
+        background: #d97706;
+    }
+    .retry-wrong-btn:hover { background: #b45309; }
+    #next-btn { display: none; }
+
+    #end-screen {
+        text-align: center;
+        display: none;
+        padding: 10px 5px;
+    }
+    #end-screen h1 {
+        color: #1e3c72;
+        font-size: 28px;
+        margin-bottom: 6px;
+    }
+    .final-grade {
+        font-size: 42px;
+        font-weight: 800;
+        margin: 12px 0;
+        color: #28a745;
+    }
+    .final-grade.fail { color: #dc3545; }
+    .breakdown-box {
+        text-align: left;
+        background: #f8f9fa;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 22px 0;
+    }
+    .breakdown-box h3 {
+        margin: 0 0 12px 0;
+        font-size: 15px;
+        color: #2c3e50;
+    }
+    .breakdown-row {
+        margin-bottom: 10px;
+    }
+    .breakdown-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13.5px;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .breakdown-bar {
+        width: 100%;
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+    .breakdown-fill {
+        height: 100%;
+        background: #2a5298;
+    }
+    .end-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+        #quiz-container { padding: 20px 18px; }
+        .course-header { padding: 18px 20px; }
+        .kbd-hint { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="course-header">
+        <h1>Curso de Especialización en Ciberseguridad (CETI)</h1>
+        <h3>Módulo: Incidentes de Ciberseguridad</h3>
+        <h4>UD1 - Desarrollo de planes de prevención y concienciación en ciberseguridad</h4>
+        <div class="header-meta">
+            <p class="prof-pill">Profesor: Fernando Sevil</p>
+            <span class="course-year">Curso 2026-2027 · Banco de 100 preguntas</span>
+        </div>
+    </div>
+
+    <div class="mode-bar">
+        <div class="mode-buttons">
+            <button class="mode-btn active" id="btn-mode-all" onclick="startMode('all')">Test Completo (100)</button>
+            <button class="mode-btn exam-btn" id="btn-mode-exam" onclick="startMode('exam')">Simulacro Examen (20)</button>
+            <button class="mode-btn" id="btn-mode-wrong" onclick="startMode('wrong')" style="display:none;">Repasar Fallos (<span id="saved-wrong-count">0</span>)</button>
+        </div>
+        <label class="shuffle-toggle" title="Mezcla el orden de las preguntas al iniciar un modo">
+            <input type="checkbox" id="shuffle-checkbox" onchange="restartCurrentMode()"> Orden aleatorio
+        </label>
+    </div>
+
+    <div id="quiz-container">
+        <div id="quiz-content">
+            <div id="section-progress" title="Haz clic en cualquier apartado para estudiar solo sus 20 preguntas"></div>
+
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+
+            <div class="header-info">
+                <span class="progress-text" id="progress-text">Cargando...</span>
+                <div class="stats-group">
+                    <span class="timer-badge" id="timer-badge">00:00</span>
+                    <span class="score-badge">Aciertos: <span id="score">0</span></span>
+                    <span class="wrong-badge">Fallos: <span id="wrong-score">0</span></span>
+                </div>
+            </div>
+
+            <div class="question-meta" id="question-meta"></div>
+            <h2 id="question-text">Cargando banco de preguntas...</h2>
+            <div id="options-container"></div>
+
+            <div id="feedback-box"></div>
+
+            <div class="action-row">
+                <span class="kbd-hint">Atajos: teclas A-D (o 1-4) para responder · Enter para siguiente</span>
+                <button class="primary-btn" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta &#8594;</button>
+            </div>
+        </div>
+
+        <div id="end-screen">
+            <h1 id="end-title">¡Test Completado!</h1>
+            <p id="end-subtitle">Has finalizado el cuestionario de la UD1.</p>
+            <div class="final-grade" id="final-grade">0.0 / 10</div>
+            <p>
+                Aciertos: <strong id="final-score">0</strong> de <strong id="total-questions-text">100</strong>
+                (<span id="final-percent">0%</span>)
+                <span id="final-time-wrap" style="display:none;"> · Tiempo: <strong id="final-time">00:00</strong></span>
+            </p>
+
+            <div class="breakdown-box" id="breakdown-box">
+                <h3>Rendimiento por apartado</h3>
+                <div id="breakdown-content"></div>
+            </div>
+
+            <div class="end-actions">
+                <button class="primary-btn retry-wrong-btn" id="end-retry-wrong" onclick="startMode('wrong')" style="display:none;">Repasar preguntas falladas</button>
+                <button class="primary-btn" onclick="restartCurrentMode()">Repetir este modo</button>
+                <button class="primary-btn" style="background:#1e3c72;" onclick="startMode('exam')">Nuevo Simulacro (20)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const allQuestions = [
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Por qué se considera que los expertos en ciberseguridad actúan como 'Gestores de la Incertidumbre'?",
+    "options": [
+      "Porque los incidentes solo se analizan tras sufrir pérdidas graves.",
+      "Porque el perímetro es imprevisible y el riesgo cero no existe.",
+      "Porque las herramientas antivirus carecen de actualizaciones automáticas.",
+      "Porque la normativa vigente cambia cada trimestre sin previo aviso."
+    ],
+    "correct": "b",
+    "feedback": "La ciberseguridad no es una ciencia exacta: sus límites coinciden con el ingenio humano, el perímetro es variable e imprevisible y el riesgo cero no existe.",
+    "id": 1
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Según los pilares de la seguridad clásica aplicados a la cibernética, ¿cuáles son las dos bases fundamentales en el ámbito empresarial?",
+    "options": [
+      "La prevención y la concienciación de las personas.",
+      "El cifrado perimetral y la auditoría forense externa.",
+      "La redundancia física y el control biométrico diario.",
+      "La contratación de seguros y el respaldo en la nube."
+    ],
+    "correct": "a",
+    "feedback": "La seguridad clásica tiene como pilares básicos la Prevención y la Concienciación de las personas, principios que se aplican directamente a la ciberseguridad empresarial.",
+    "id": 2
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "En las Tres Reglas Pragmáticas de Agile Corporation, ¿qué significa exactamente la regla de 'Concienciación'?",
+    "options": [
+      "Auditar trimestralmente los registros de acceso de toda la plantilla.",
+      "Prepararse para el caso peor con planes de recuperación rápida.",
+      "Alertar de lo desconocido mediante protocolos de alarma y personal formado.",
+      "Protegerse de lo conocido mediante parches y herramientas antivirus."
+    ],
+    "correct": "c",
+    "feedback": "Las Tres Reglas Pragmáticas son: Prevención (protegerse de lo conocido), Concienciación (alertar de lo desconocido) y Respuesta (prepararse para el Caso Peor).",
+    "id": 3
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Dentro de las Tres Reglas Pragmáticas, ¿cuál es el propósito principal de la regla de 'Respuesta'?",
+    "options": [
+      "Implantar filtros automáticos que bloqueen todo el tráfico externo.",
+      "Formar a los usuarios para identificar correos electrónicos sospechosos.",
+      "Eliminar todas las vulnerabilidades conocidas antes de lanzar un servicio.",
+      "Prepararse para el caso peor para contener incursiones y minimizar daños."
+    ],
+    "correct": "d",
+    "feedback": "La tercera regla pragmática es 'Respuesta: Prepararse para el Caso Peor', enfocada en contener incursiones y minimizar daños cuando ocurren.",
+    "id": 4
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Qué principio básico establece el Artículo 6 del Esquema Nacional de Seguridad (RD 311/2022)?",
+    "options": [
+      "La seguridad entendida como un proceso integral.",
+      "La reevaluación periódica de las medidas implantadas.",
+      "La gestión de la seguridad basada en los riesgos.",
+      "La seguridad estructurada como una función diferenciada."
+    ],
+    "correct": "c",
+    "feedback": "En el ENS (RD 311/2022), el Artículo 5 es proceso integral, el Artículo 6 es gestión basada en los riesgos, el 9 reevaluación periódica y el 10 función diferenciada.",
+    "id": 5
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Cuál de los siguientes principios del ENS (RD 311/2022) corresponde específicamente al Artículo 8?",
+    "options": [
+      "La seguridad como proceso integral.",
+      "Prevención, reacción y recuperación.",
+      "Reevaluación periódica.",
+      "Líneas de defensa."
+    ],
+    "correct": "d",
+    "feedback": "El Artículo 8 del ENS establece el principio de 'Líneas de defensa' (el 7 es prevención, reacción y recuperación; el 9 reevaluación periódica).",
+    "id": 6
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "En España, ¿qué organismo publica el informe con el 'Decálogo Básico de Ciberseguridad' y atiende al sector público y estratégico?",
+    "options": [
+      "El Centro Criptológico Nacional (CCN-CERT).",
+      "El Instituto Nacional de Ciberseguridad (INCIBE-CERT).",
+      "El Consejo Nacional de Seguridad Industrial (CNSI).",
+      "La Agencia Española de Protección de Datos (AEPD)."
+    ],
+    "correct": "a",
+    "feedback": "El CCN-CERT publica los Principios Generales y el Decálogo Básico de Ciberseguridad, y es la referencia para el sector público y estratégico; INCIBE-CERT atiende a ciudadanía y sector privado.",
+    "id": 7
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Si una persona no autorizada consigue leer el historial clínico de un paciente sin modificarlo, ¿qué principio de la Tríada CIA se vulnera?",
+    "options": [
+      "La trazabilidad del registro.",
+      "La disponibilidad del sistema.",
+      "La confidencialidad de los datos.",
+      "La integridad de la información."
+    ],
+    "correct": "c",
+    "feedback": "La confidencialidad asegura que la información solo sea accesible por entidades autorizadas, previniendo la divulgación no autorizada.",
+    "id": 8
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Un atacante accede a la base de datos de un hospital y altera la dosis de medicación de un paciente. ¿Qué principio se ve comprometido principalmente?",
+    "options": [
+      "La disponibilidad.",
+      "La confidencialidad.",
+      "La integridad.",
+      "La escalabilidad."
+    ],
+    "correct": "c",
+    "feedback": "La integridad salvaguarda la exactitud y completitud de los activos de información, evitando alteraciones, corrupciones o eliminaciones no autorizadas.",
+    "id": 9
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Qué principio adicional a la Tríada CIA garantiza que un usuario no pueda negar haber realizado una operación registrada en los logs?",
+    "options": [
+      "La autenticación multifactor.",
+      "La redundancia de sistemas.",
+      "La confidencialidad en reposo.",
+      "La trazabilidad o no repudio."
+    ],
+    "correct": "d",
+    "feedback": "La trazabilidad (o no repudio) permite demostrar sin lugar a dudas que una acción fue realizada por una entidad específica, quedando reflejada en los logs.",
+    "id": 10
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Con qué analogía se explica el principio de 'Autenticidad' en la gestión de la seguridad digital?",
+    "options": [
+      "La comprobación del DNI antes de entrar a un recinto.",
+      "Una firma manuscrita estampada en un contrato legal.",
+      "Un generador eléctrico que evita cortes en un hospital.",
+      "Una bóveda cerrada que protege documentos confidenciales."
+    ],
+    "correct": "a",
+    "feedback": "La autenticidad asegura que una entidad es quien dice ser, equivalente a comprobar el DNI en un acceso (en digital: contraseñas, certificados o biometría).",
+    "id": 11
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "En la analogía de la fortaleza usada para diferenciar amenaza, vulnerabilidad y riesgo, ¿qué representa una grieta en la muralla?",
+    "options": [
+      "Un impacto residual.",
+      "Una amenaza externa.",
+      "Un riesgo cuantificado.",
+      "Una vulnerabilidad."
+    ],
+    "correct": "d",
+    "feedback": "En la analogía de la fortaleza, la grieta en la muralla es la vulnerabilidad, el ejército enemigo es la amenaza y la probabilidad de invasión con daño es el riesgo.",
+    "id": 12
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Cuál de los siguientes elementos constituye una 'vulnerabilidad' y no una 'amenaza'?",
+    "options": [
+      "Una inundación en el edificio donde está el CPD.",
+      "Una puerta sin cerradura en la sala de servidores.",
+      "Un empleado descontento que intenta sustraer datos.",
+      "Un programa de ransomware dirigido a la red interna."
+    ],
+    "correct": "b",
+    "feedback": "La vulnerabilidad es la debilidad (puerta sin cerradura, contraseña débil, falta de parches); la amenaza es el peligro potencial (ransomware, inundación, atacante).",
+    "id": 13
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Cómo se expresa conceptualmente la evaluación del riesgo en seguridad de la información?",
+    "options": [
+      "Riesgo = Activo / Contramedida.",
+      "Riesgo = Probabilidad x Impacto.",
+      "Riesgo = Impacto - Probabilidad.",
+      "Riesgo = Amenaza + Vulnerabilidad."
+    ],
+    "correct": "b",
+    "feedback": "El riesgo se evalúa conceptualmente mediante la fórmula Riesgo = Probabilidad x Impacto.",
+    "id": 14
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Qué ataque consiste en interceptar la comunicación entre dos partes, habitualmente en redes Wi-Fi públicas inseguras?",
+    "options": [
+      "Denegación de servicio distribuida.",
+      "Defacement web.",
+      "Inyección de copias de seguridad.",
+      "Man-in-the-Middle (MitM)."
+    ],
+    "correct": "d",
+    "feedback": "En un ataque Man-in-the-Middle (MitM), el atacante intercepta la comunicación entre dos partes para leer o modificar información, siendo frecuente en redes Wi-Fi públicas.",
+    "id": 15
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Un atacante reemplaza la página principal de una empresa por un mensaje político propio. ¿Qué tipo de amenaza contra la integridad ha ocurrido?",
+    "options": [
+      "Keylogging persistente.",
+      "Defacement web.",
+      "Fuga de datos (Data Breach).",
+      "Ataque DDoS por botnet."
+    ],
+    "correct": "b",
+    "feedback": "El defacement web modifica la apariencia visual y el contenido público de un sitio web, atacando directamente la integridad de la información.",
+    "id": 16
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "Aunque su motivación suele ser económica, ¿qué principio de la Tríada CIA ataca de forma principal el ransomware?",
+    "options": [
+      "La confidencialidad.",
+      "La autenticidad.",
+      "La disponibilidad.",
+      "La trazabilidad."
+    ],
+    "correct": "c",
+    "feedback": "Al cifrar los archivos del sistema e impedir que los usuarios legítimos accedan a ellos, el impacto principal del ransomware es sobre la disponibilidad.",
+    "id": 17
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Qué diferencia el cifrado en tránsito del cifrado en reposo como medidas de confidencialidad?",
+    "options": [
+      "El primero protege datos al viajar por la red y el segundo al estar almacenados.",
+      "El primero requiere firma digital cualificada y el segundo usa copias RAID.",
+      "El cifrado en tránsito usa hashes SHA-256 y el de reposo usa listas ACL.",
+      "El primero se aplica solo en servidores Linux y el segundo en equipos portátiles."
+    ],
+    "correct": "a",
+    "feedback": "El cifrado en tránsito protege los datos mientras viajan por la red (HTTPS, VPN), mientras que el cifrado en reposo los protege almacenados (BitLocker, VeraCrypt).",
+    "id": 18
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Cuál de estas contramedidas protege específicamente la integridad al generar una 'huella digital' única de un archivo?",
+    "options": [
+      "Los clústeres redundantes con discos RAID.",
+      "Las funciones hash como SHA-256 o MD5.",
+      "Las listas de control de acceso (ACLs).",
+      "Los sistemas de alimentación ininterrumpida (SAI)."
+    ],
+    "correct": "b",
+    "feedback": "Las funciones hash (como SHA-256 o MD5) generan una huella digital única que cambia por completo ante cualquier modificación mínima del archivo.",
+    "id": 19
+  },
+  {
+    "apartado": "1.1. Principios generales",
+    "question": "¿Por qué se compara la auditoría de seguridad con la Inspección Técnica de Vehículos (ITV)?",
+    "options": [
+      "Porque un experto revisa de forma objetiva si se cumple la normativa sin fallos.",
+      "Porque la realiza obligatoriamente la policía judicial cada dos años.",
+      "Porque sustituye la necesidad de mantener copias de seguridad diarias.",
+      "Porque se limita a medir la velocidad de conexión de los equipos."
+    ],
+    "correct": "a",
+    "feedback": "Al igual que la ITV, la auditoría es una evaluación sistemática y objetiva realizada por un experto para verificar cumplimiento, detectar vulnerabilidades y proponer mejoras.",
+    "id": 20
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Por qué la expansión del puesto de trabajo moderno ha convertido al endpoint en objetivo prioritario?",
+    "options": [
+      "Porque los servidores centrales ya no contienen bases de datos de valor comercial.",
+      "Porque abarca portátiles, móviles, Wi-Fi doméstica y nube, multiplicando la superficie de ataque.",
+      "Porque los sistemas operativos actuales han eliminado el firewall de host integrado.",
+      "Porque las empresas han dejado de utilizar políticas de seguridad corporativas."
+    ],
+    "correct": "b",
+    "feedback": "El puesto de trabajo moderno trasciende el escritorio físico (portátil, smartphone, teletrabajo, nube), multiplicando exponencialmente la superficie de ataque.",
+    "id": 21
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿De qué premisa básica parte cualquier Normativa de Protección del Puesto de Trabajo?",
+    "options": [
+      "El usuario es el eslabón más débil de la cadena de ciberseguridad.",
+      "Las actualizaciones automáticas sustituyen a la formación laboral.",
+      "El cifrado de disco elimina cualquier riesgo de ingeniería social.",
+      "La seguridad física solo es relevante en los centros de datos."
+    ],
+    "correct": "a",
+    "feedback": "Toda normativa de puesto de trabajo parte de que el usuario es el eslabón más débil: un error humano puede comprometer toda la red pese a la tecnología.",
+    "id": 22
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué es un 'exploit' en el contexto de las vulnerabilidades tecnológicas del puesto de trabajo?",
+    "options": [
+      "Un parche de seguridad publicado mensualmente por el fabricante.",
+      "Una herramienta de bastionado que desactiva servicios de red innecesarios.",
+      "Un programa diseñado para aprovechar una vulnerabilidad y ejecutar código malicioso.",
+      "Un registro oficial que clasifica el nivel de confidencialidad de un archivo."
+    ],
+    "correct": "c",
+    "feedback": "Un exploit es un programa diseñado específicamente para aprovechar una vulnerabilidad conocida (identificada con un código CVE) y comprometer el equipo.",
+    "id": 23
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué riesgo concreto genera la reutilización de una misma contraseña en servicios personales y corporativos?",
+    "options": [
+      "Si un servicio externo sufre una brecha, el atacante la probará en la empresa.",
+      "Bloquea el salvapantallas automático del sistema operativo.",
+      "Aumenta el consumo de ancho de banda de la red Wi-Fi doméstica.",
+      "Impide activar el cifrado de disco completo mediante BitLocker."
+    ],
+    "correct": "a",
+    "feedback": "Cuando un servicio externo sufre una brecha de datos, la contraseña reutilizada queda expuesta y los atacantes la prueban directamente en los sistemas corporativos.",
+    "id": 24
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Por qué es necesario aplicar 'bastionado' o hardening a un sistema operativo recién instalado?",
+    "options": [
+      "Porque las configuraciones por defecto priorizan la facilidad de uso sobre la seguridad.",
+      "Porque el fabricante exige activar todos los servicios de red antes del uso.",
+      "Porque los sistemas operativos nuevos carecen de soporte para cuentas de usuario.",
+      "Porque es el único modo de impedir el robo físico del ordenador portátil."
+    ],
+    "correct": "a",
+    "feedback": "Los sistemas operativos y aplicaciones vienen con configuraciones por defecto orientadas a la facilidad de uso; el bastionado reduce su superficie de ataque.",
+    "id": 25
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿En qué consiste la técnica física conocida como 'Shoulder Surfing'?",
+    "options": [
+      "Buscar documentos confidenciales sin triturar en los contenedores de basura.",
+      "Dejar memorias USB infectadas en el aparcamiento de la organización.",
+      "Mirar por encima del hombro de una persona para ver su pantalla o contraseña.",
+      "Colarse por una puerta de acceso restringido detrás de un empleado autorizado."
+    ],
+    "correct": "c",
+    "feedback": "El Shoulder Surfing consiste en observar por encima del hombro la pantalla o el teclado de un usuario para captar contraseñas o información sensible.",
+    "id": 26
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Cómo se denomina la práctica física de colarse en unas instalaciones detrás de un empleado autorizado sin usar credencial propia?",
+    "options": [
+      "Tailgating.",
+      "Malvertising.",
+      "USB baiting.",
+      "Dumpster diving."
+    ],
+    "correct": "a",
+    "feedback": "El Tailgating ocurre cuando alguien aprovecha que un empleado autorizado abre una puerta de acceso para entrar justo detrás sin identificarse.",
+    "id": 27
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué busca un atacante al ejecutar una técnica de 'USB baiting' en zonas comunes o aparcamientos?",
+    "options": [
+      "Que un empleado curioso conecte la memoria infectada a su equipo.",
+      "Comprobar si los empleados trituran los documentos impresos.",
+      "Obtener las credenciales de acceso físico a la sala de servidores.",
+      "Interceptar el tráfico inalámbrico de los teléfonos corporativos."
+    ],
+    "correct": "a",
+    "feedback": "En el USB baiting, el atacante deja memorias USB infectadas en zonas comunes esperando que un empleado curioso las conecte a un equipo corporativo.",
+    "id": 28
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué técnica de obtención de información se facilita cuando se tiran documentos confidenciales a la papelera sin triturar?",
+    "options": [
+      "Business Email Compromise (fraude del CEO).",
+      "Endpoint compromise (compromiso del equipo).",
+      "Shoulder surfing (observación directa).",
+      "Dumpster diving (buceo en la basura)."
+    ],
+    "correct": "d",
+    "feedback": "Arrojar documentos sensibles sin destruirlos en una trituradora expone información valiosa al dumpster diving o buceo en la basura.",
+    "id": 29
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "Según los apuntes, ¿en qué sesgos cognitivos humanos se apoya principalmente la ingeniería social?",
+    "options": [
+      "La memoria visual, la fatiga auditiva y el aburrimiento laboral.",
+      "La urgencia, la autoridad y la curiosidad de las personas.",
+      "La competencia salarial, el teletrabajo y el exceso de normas.",
+      "El miedo tecnológico, la desconfianza y la falta de equipo."
+    ],
+    "correct": "b",
+    "feedback": "La ingeniería social ataca la psicología humana explotando sesgos como la urgencia, la autoridad y la curiosidad, estando detrás del 90% de los ataques exitosos.",
+    "id": 30
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "Cuando un atacante toma el control del PC de un empleado y lo usa como cabeza de puente para moverse lateralmente por la red, ¿qué riesgo se materializa?",
+    "options": [
+      "Suplantación telefónica de soporte técnico.",
+      "Compromiso del equipo (Endpoint Compromise).",
+      "Desecho inseguro de soportes físicos.",
+      "Interrupción del negocio (Business Disruption)."
+    ],
+    "correct": "b",
+    "feedback": "En el Compromiso del Equipo (Endpoint Compromise), el ordenador del empleado sirve de cabeza de puente para moverse lateralmente hacia sistemas más críticos.",
+    "id": 31
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué tres tipos de impacto suele provocar una Fuga de Datos (Data Exfiltration) en una organización?",
+    "options": [
+      "Técnico, eléctrico y de rendimiento de CPU.",
+      "Administrativo, laboral y de conectividad Wi-Fi.",
+      "Financiero, reputacional y competitivo.",
+      "Logístico, ambiental y de licencias de software."
+    ],
+    "correct": "c",
+    "feedback": "La fuga de datos genera impacto financiero (multas RGPD), reputacional (pérdida de confianza de clientes) y competitivo (robo de propiedad intelectual).",
+    "id": 32
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿De qué estándar de seguridad proviene principalmente el concepto de Política de Mesas Limpias y Pantallas Limpias?",
+    "options": [
+      "Del protocolo internacional de cifrado FIDO2.",
+      "De la directiva europea sobre residuos electrónicos.",
+      "De estándares de seguridad como la ISO 27001.",
+      "Del Reglamento de Tráfico de Redes Privadas."
+    ],
+    "correct": "c",
+    "feedback": "La Política de Mesas Limpias y Pantallas Limpias (Clean Desk, Clear Screen) proviene de estándares de seguridad como la ISO 27001.",
+    "id": 33
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "Según el checklist de Mesas y Pantallas Limpias, ¿qué acción debe realizarse al abandonar el puesto aunque sea por un instante?",
+    "options": [
+      "Apagar completamente el ordenador y desconectar la red.",
+      "Cerrar únicamente el cliente de correo electrónico corporativo.",
+      "Bajar el brillo del monitor para evitar el shoulder surfing.",
+      "Bloquear la sesión del equipo, por ejemplo con Windows + L."
+    ],
+    "correct": "d",
+    "feedback": "Al abandonar el puesto, incluso por un instante, debe bloquearse la sesión (Windows + L), además de contar con salvapantallas protegido tras 2-5 minutos.",
+    "id": 34
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué intervalo de inactividad se cita como ejemplo para activar automáticamente el salvapantallas protegido por contraseña?",
+    "options": [
+      "Al finalizar la jornada laboral.",
+      "Exactamente 60 minutos.",
+      "Entre 15 y 30 minutos.",
+      "Entre 2 y 5 minutos."
+    ],
+    "correct": "d",
+    "feedback": "El checklist de cumplimiento recomienda que el salvapantallas protegido por contraseña se active automáticamente tras un corto periodo de inactividad (ej. 2-5 minutos).",
+    "id": 35
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué regula específicamente la Política de Uso Aceptable de los Activos (AUP)?",
+    "options": [
+      "La clasificación de hallazgos tras una auditoría interna anual.",
+      "Qué pueden y qué no pueden hacer los empleados con los recursos TI.",
+      "El algoritmo de cifrado usado en las copias de seguridad del CPD.",
+      "El calendario anual de simulaciones de phishing de la empresa."
+    ],
+    "correct": "b",
+    "feedback": "La AUP (Acceptable Use Policy) define qué pueden y qué no pueden hacer los empleados con los recursos tecnológicos (software, USB, navegación web y correo).",
+    "id": 36
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "Dentro de la AUP, ¿qué criterio se aplica al uso de memorias USB y dispositivos extraíbles?",
+    "options": [
+      "Autorizar su uso libre siempre que no se conecten durante el teletrabajo.",
+      "Prohibir únicamente el uso de discos duros externos de más de 1 TB.",
+      "Limitar su uso a dispositivos corporativos cifrados o deshabilitar puertos.",
+      "Permitir cualquier USB personal si el empleado pasa el antivirus antes."
+    ],
+    "correct": "c",
+    "feedback": "La AUP establece limitar el uso de USBs a dispositivos corporativos y cifrados, llegando a deshabilitar los puertos USB si es necesario.",
+    "id": 37
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué herramientas se recomiendan como medida obligatoria de bastionado para el cifrado de disco completo en portátiles?",
+    "options": [
+      "HTTPS en navegadores y VPN en redes locales.",
+      "SHA-256 en Windows y MD5 en dispositivos Mac.",
+      "Firewall de host en Windows y Git en equipos Mac.",
+      "BitLocker en Windows y FileVault en equipos Mac."
+    ],
+    "correct": "d",
+    "feedback": "El bastionado del equipo incluye cifrado de disco completo mediante BitLocker (Windows) o FileVault (Mac) en todos los equipos portátiles.",
+    "id": 38
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿Qué implica aplicar el 'Principio de Mínimos Privilegios' en el puesto de trabajo?",
+    "options": [
+      "Permitir que solo gerencia utilice autenticación multifactor.",
+      "Trabajar con cuentas estándar sin permisos de administrador.",
+      "Restringir el acceso a Internet a una hora diaria por departamento.",
+      "Eliminar los programas ofimáticos que no se usen cada semana."
+    ],
+    "correct": "b",
+    "feedback": "El Principio de Mínimos Privilegios exige que los usuarios trabajen con cuentas estándar sin permisos de administrador para impedir instalaciones o cambios de configuración.",
+    "id": 39
+  },
+  {
+    "apartado": "1.2. Protección del puesto",
+    "question": "¿En qué colección de INCIBE se encuentra el dossier específico recomendado sobre Protección del Puesto de Trabajo?",
+    "options": [
+      "En la Guía de Auditoría Técnica Avanzada.",
+      "En el Manual de Respuesta a Incidentes ENS.",
+      "En el Decálogo Básico de Ciberseguridad.",
+      "En la colección 'Protege tu empresa'."
+    ],
+    "correct": "d",
+    "feedback": "Dentro de su colección 'Protege tu empresa', INCIBE publica un dossier específico y actualizado sobre Protección del Puesto de Trabajo.",
+    "id": 40
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Cuál es la finalidad última de un Plan de Formación y Concienciación en ciberseguridad?",
+    "options": [
+      "Sancionar automáticamente a quienes cometan errores informáticos.",
+      "Sustituir la inversión en firewalls y antivirus por cursos anuales.",
+      "Inculcar una cultura de seguridad para reducir la superficie de ataque.",
+      "Convertir a todos los empleados en especialistas técnicos en forense."
+    ],
+    "correct": "c",
+    "feedback": "El objetivo no es convertir a los empleados en expertos técnicos, sino inculcar una cultura de seguridad, reducir la superficie de ataque y hacer cumplir las políticas.",
+    "id": 41
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "Si un empleado entrenado es víctima de un ataque sofisticado, ¿qué le permite hacer la formación recibida?",
+    "options": [
+      "Negociar directamente con el atacante para evitar la fuga de datos.",
+      "Mitigar sus efectos, reunir información y notificar por los canales correctos.",
+      "Desinstalar el sistema operativo y restaurar el servidor central.",
+      "Modificar las reglas del firewall perimetral desde su puesto."
+    ],
+    "correct": "b",
+    "feedback": "El entrenamiento permite que, incluso ante un ataque sofisticado, el usuario mitigue sus efectos, reúna información útil y notifique por los canales establecidos.",
+    "id": 42
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Por qué el criterio de 'Soporte Ejecutivo' es determinante para el éxito de un plan de concienciación?",
+    "options": [
+      "Porque permite eliminar las evaluaciones iniciales del personal.",
+      "Porque exime a la organización de cumplir con el ENS y la ISO 27001.",
+      "Porque la dirección debe impartir personalmente todos los talleres técnicos.",
+      "Porque sin el apoyo visible de la dirección se percibe como baja prioridad."
+    ],
+    "correct": "d",
+    "feedback": "Cuando la alta dirección apoya y promueve visiblemente el plan, su compromiso se transmite a toda la empresa; sin él, se percibe como una tarea secundaria.",
+    "id": 43
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Cómo se aplica el criterio de 'Enfoque Continuo y Evolutivo' en un plan de formación eficaz?",
+    "options": [
+      "Impartiendo una única charla obligatoria el día de la contratación.",
+      "Repitiendo exactamente la misma presentación cada tres años.",
+      "Combinando onboarding inicial con recordatorios, boletines y simulaciones.",
+      "Enviando un manual extenso en PDF sin evaluaciones posteriores."
+    ],
+    "correct": "c",
+    "feedback": "Al evolucionar las amenazas a diario, el plan debe ser un ciclo continuo que combine formación inicial (onboarding) con recordatorios, boletines y simulaciones.",
+    "id": 44
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "Según el criterio de 'Relevancia y Segmentación de la Audiencia', ¿qué formación específica priorizarías para el personal de finanzas?",
+    "options": [
+      "Detección del fraude por correo electrónico (Business Email Compromise).",
+      "Instalación de sistemas de alimentación ininterrumpida en oficinas.",
+      "Técnicas de desarrollo seguro de código fuente y control con Git.",
+      "Configuración avanzada de clústeres de servidores y discos RAID."
+    ],
+    "correct": "a",
+    "feedback": "La segmentación adapta el contenido al rol: los desarrolladores necesitan desarrollo seguro y finanzas formación específica contra Business Email Compromise (BEC).",
+    "id": 45
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué caracteriza al 'Microaprendizaje' (Microlearning) dentro de una metodología atractiva y multicanal?",
+    "options": [
+      "Manuales técnicos impresos clasificados por departamento.",
+      "Cursos magistrales de cuatro horas con examen escrito final.",
+      "Competiciones anuales exclusivamente para el equipo de sistemas.",
+      "Vídeos cortos y píldoras formativas de menos de 5 minutos por concepto."
+    ],
+    "correct": "d",
+    "feedback": "El microlearning utiliza vídeos cortos y píldoras formativas que explican un concepto en menos de 5 minutos, superando el 'PowerPoint de la muerte'.",
+    "id": 46
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "Al evaluar el impacto del plan mediante KPIs, ¿cómo debe interpretarse un aumento en la 'Tasa de Reporte de Incidentes'?",
+    "options": [
+      "Como una métrica positiva que indica un mayor nivel de alerta.",
+      "Como un motivo para reducir la frecuencia de las simulaciones.",
+      "Como un fallo grave del antivirus corporativo instalado.",
+      "Como una señal de que la formación ha resultado ineficaz."
+    ],
+    "correct": "a",
+    "feedback": "Un aumento en la tasa de reporte de correos sospechosos es una métrica positiva, ya que refleja mayor alerta y participación activa de la plantilla.",
+    "id": 47
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "Respecto al criterio de 'Obligatoriedad y Responsabilidad', ¿qué papel deben desempeñar los mandos intermedios?",
+    "options": [
+      "Eximir de la formación a los empleados con mayor carga comercial.",
+      "Evaluar las vulnerabilidades técnicas de los servidores de su área.",
+      "Facilitar tiempo y oportunidades dentro de la jornada laboral.",
+      "Redactar el código de las simulaciones de phishing del departamento."
+    ],
+    "correct": "c",
+    "feedback": "Además de comunicar qué capacitación es obligatoria, los supervisores y mandos intermedios deben facilitar tiempo dentro de la jornada laboral para realizarla.",
+    "id": 48
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué tres variantes de ingeniería social se distinguen según el canal (correo, llamada de voz y SMS)?",
+    "options": [
+      "Tailgating, Baiting y Surfing.",
+      "Phishing, Vishing y Smishing.",
+      "DoS, DDoS y Man-in-the-Middle.",
+      "Spyware, Adware y Ransomware."
+    ],
+    "correct": "b",
+    "feedback": "Phishing utiliza el correo electrónico, Vishing emplea llamadas de voz y Smishing se realiza a través de mensajes SMS.",
+    "id": 49
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué técnica se recomienda enseñar en el plan de concienciación para comprobar un enlace recibido por correo?",
+    "options": [
+      "Hacer clic rápidamente en modo incógnito para ver el destino.",
+      "Responder al remitente preguntando si el enlace es auténtico.",
+      "Reenviar el correo a un compañero para confirmar si es legítimo.",
+      "Pasar el ratón por encima sin hacer clic para verificar la URL real."
+    ],
+    "correct": "d",
+    "feedback": "Se debe enseñar a analizar cabeceras, desconfiar de remitentes desconocidos y verificar enlaces pasando el ratón por encima sin hacer clic.",
+    "id": 50
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Por qué se promueve la técnica de las 'frases de paso' frente a contraseñas cortas y complejas?",
+    "options": [
+      "Porque pueden compartirse fácilmente entre compañeros de equipo.",
+      "Porque son más largas, más fáciles de recordar y mucho más seguras.",
+      "Porque los sistemas operativos no admiten símbolos especiales cortos.",
+      "Porque eliminan la necesidad de utilizar autenticación multifactor."
+    ],
+    "correct": "b",
+    "feedback": "Las frases de paso (ej. 'MiPerroCocoCome2Manzanas!') son más largas, más fáciles de recordar y mucho más seguras que contraseñas cortas aunque sean complejas.",
+    "id": 51
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Cuál de las siguientes opciones es un ejemplo de vector de infección conocido como 'malvertising'?",
+    "options": [
+      "Un archivo adjunto ejecutable enviado por correo corporativo.",
+      "Una memoria USB encontrada en el aparcamiento de la oficina.",
+      "Publicidad maliciosa alojada en páginas web legítimas.",
+      "Una llamada fraudulenta suplantando al departamento de soporte."
+    ],
+    "correct": "c",
+    "feedback": "El malvertising consiste en distribuir malware a través de publicidad maliciosa insertada incluso en páginas web legítimas.",
+    "id": 52
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "Según los contenidos esenciales sobre ransomware, ¿cuál es el procedimiento inmediato que debe seguir un empleado si sospecha una infección?",
+    "options": [
+      "Reiniciar el ordenador varias veces y restaurar una copia local.",
+      "Aislar inmediatamente el equipo de la red y avisar al departamento de TI.",
+      "Buscar en Internet una herramienta gratuita de descifrado rápido.",
+      "Enviar un correo masivo a toda la empresa adjuntando el archivo."
+    ],
+    "correct": "b",
+    "feedback": "En caso de infección por ransomware, el procedimiento inmediato es aislar el equipo de la red para evitar la propagación y avisar al departamento de TI.",
+    "id": 53
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué medida resulta imprescindible enseñar a los empleados cuando trabajan desde redes Wi-Fi públicas?",
+    "options": [
+      "Utilizar siempre una VPN corporativa para cifrar el tráfico.",
+      "Desactivar el firewall de host para mejorar la velocidad de red.",
+      "Conectar el teléfono por USB para evitar usar el navegador.",
+      "Guardar los archivos confidenciales en el escritorio sin cifrar."
+    ],
+    "correct": "a",
+    "feedback": "Al conectarse a redes Wi-Fi públicas, es necesario utilizar siempre una VPN (Red Privada Virtual) corporativa para cifrar el tráfico y evitar interceptaciones.",
+    "id": 54
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué cuatro niveles habituales de clasificación de la información se enseñan para manejar los datos con seguridad?",
+    "options": [
+      "Pública, interna, confidencial y restringida.",
+      "Activa, archivada, cifrada y eliminada.",
+      "Local, departamental, externa y global.",
+      "Baja, media, alta y crítica."
+    ],
+    "correct": "a",
+    "feedback": "Los empleados deben aprender a identificar qué información es pública, interna, confidencial o restringida para tratarla adecuadamente.",
+    "id": 55
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Qué condición cultural es fundamental en el procedimiento de notificación de incidentes para que los empleados reporten anomalías?",
+    "options": [
+      "Limitar los avisos únicamente al horario de tarde los viernes.",
+      "Exigir un informe técnico detallado antes de avisar a seguridad.",
+      "Garantizar que el empleado no tema represalias por cometer un error.",
+      "Premiar económicamente cada correo borrado sin reportar."
+    ],
+    "correct": "c",
+    "feedback": "Además de ofrecer un canal sencillo (botón de reportar o email específico), es crucial que el empleado se sienta seguro y no tema represalias al notificar.",
+    "id": 56
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Para qué se realiza una primera campaña de simulación de phishing 'en frío' durante la Fase 1 (Análisis y Diagnóstico)?",
+    "options": [
+      "Para calcular el retorno de la inversión (ROI) final del programa.",
+      "Para establecer una línea base de métricas antes de iniciar la formación.",
+      "Para probar únicamente los filtros antispam del proveedor de correo.",
+      "Para identificar a los empleados que deben ser sancionados ese año."
+    ],
+    "correct": "b",
+    "feedback": "En la Fase 1 se lanza un cuestionario previo y una simulación de phishing 'en frío' para establecer la línea base de métricas sobre la que medir el progreso.",
+    "id": 57
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "En la Fase 2 (Diseño y Planificación), ¿qué significan las siglas de los objetivos SMART?",
+    "options": [
+      "Seguros, Monitorizados, Auditables, Rápidos y Técnicos.",
+      "Sistémicos, Moderados, Adaptables, Rentables y Trazables.",
+      "Sencillos, Multicanal, Automáticos, Replicables y Transversales.",
+      "Específicos, Medibles, Alcanzables, Relevantes y con Plazo definido."
+    ],
+    "correct": "d",
+    "feedback": "Los objetivos SMART son Específicos, Medibles, Alcanzables, Relevantes y con un Plazo definido (ej. reducir clics de phishing del 30% al 10% en 12 meses).",
+    "id": 58
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿En qué fase de la elaboración del plan se generan informes para la dirección mostrando el progreso y el ROI del programa?",
+    "options": [
+      "Fase 4: Medición y Reporte.",
+      "Fase 3: Implementación y Ejecución.",
+      "Fase 1: Análisis y Diagnóstico.",
+      "Fase 2: Diseño y Planificación."
+    ],
+    "correct": "a",
+    "feedback": "La Fase 4 (Medición y Reporte) recopila métricas de las plataformas y genera informes periódicos para la dirección mostrando el avance y el ROI.",
+    "id": 59
+  },
+  {
+    "apartado": "1.3. Plan de concienciación",
+    "question": "¿Cuál es el cometido principal de la Fase 5 (Revisión y Mejora Continua) del plan de formación?",
+    "options": [
+      "Segmentar inicialmente a los empleados por departamento y rol.",
+      "Presentar el plan por primera vez a toda la plantilla.",
+      "Configurar las credenciales de acceso a la plataforma e-learning.",
+      "Analizar resultados y feedback para actualizar el plan al siguiente ciclo."
+    ],
+    "correct": "d",
+    "feedback": "La Fase 5 analiza los informes y el feedback de los empleados para actualizar contenidos y metodología en el siguiente ciclo según las nuevas amenazas.",
+    "id": 60
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué tres disciplinas se afirma que combina la selección adecuada de materiales de formación y concienciación?",
+    "options": [
+      "Contabilidad, logística y redes locales.",
+      "Pedagogía, marketing y ciberseguridad.",
+      "Psicología clínica, diseño 3D y criptografía.",
+      "Derecho penal, programación y auditoría."
+    ],
+    "correct": "b",
+    "feedback": "Seleccionar los materiales adecuados es un arte que combina pedagogía, marketing y ciberseguridad para crear un ecosistema de concienciación eficaz.",
+    "id": 61
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿En qué tres grandes categorías se clasifican los materiales de concienciación según su propósito y nivel de interacción?",
+    "options": [
+      "Internos de oficina, externos de nube y confidenciales de dirección.",
+      "Preventivos de inicio, reactivos de crisis y de análisis forense.",
+      "Técnicos de red, administrativos de gestión y de seguridad física.",
+      "Pasivos de refuerzo visual, formación estructurada e interactivos."
+    ],
+    "correct": "d",
+    "feedback": "Los materiales se agrupan en: 1) Pasivos y de refuerzo visual, 2) Formación estructurada y 3) Interactivos y de simulación.",
+    "id": 62
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Cuál es la función principal de los materiales pasivos y de refuerzo visual en la oficina?",
+    "options": [
+      "Mantener la ciberseguridad presente de forma no intrusiva y constante.",
+      "Certificar oficialmente los conocimientos teóricos mediante examen.",
+      "Evaluar individualmente qué empleado comete más errores técnicos.",
+      "Sustituir las campañas prácticas de simulación de phishing."
+    ],
+    "correct": "a",
+    "feedback": "Los materiales pasivos (carteles, salvapantallas, boletines) mantienen la ciberseguridad presente en el día a día como recordatorios no intrusivos.",
+    "id": 63
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué diferencia principalmente a una infografía de un cartel tradicional en una campaña de concienciación?",
+    "options": [
+      "El cartel requiere conexión a la intranet y la infografía es impresa.",
+      "La infografía sustituye a los cursos e-learning de nuevas altas.",
+      "La infografía se envía por SMS y el cartel solo por correo interno.",
+      "La infografía usa iconos y datos; el cartel, eslogan o imagen de impacto."
+    ],
+    "correct": "d",
+    "feedback": "Las infografías usan iconos y datos para simplificar conceptos complejos, mientras que los carteles se apoyan en un eslogan o una imagen impactante.",
+    "id": 64
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Cuál es una buena práctica esencial al diseñar y colocar cartelería de ciberseguridad?",
+    "options": [
+      "Centrar cada cartel en un mensaje único y ubicarlo en zonas de alto tránsito.",
+      "Mantener exactamente los mismos carteles sin rotarlos durante varios años.",
+      "Incluir toda la normativa completa en letra pequeña para ahorrar papel.",
+      "Colocarlos únicamente en la entrada del centro de procesamiento de datos."
+    ],
+    "correct": "a",
+    "feedback": "Cada cartel debe tener un mensaje único y claro, diseño atractivo con poco texto y ubicarse en zonas de paso (máquina de café, impresoras, ascensores, cafetería).",
+    "id": 65
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué ventaja destacada ofrecen los salvapantallas y fondos de escritorio corporativos como material de concienciación?",
+    "options": [
+      "Fomentan la resolución de dudas técnicas en directo con expertos.",
+      "Permiten medir exactamente qué empleados comprenden el RGPD.",
+      "Bloquean automáticamente los correos de phishing antes de abrirse.",
+      "Tienen coste cero, exposición continua y llegan a todos los equipos."
+    ],
+    "correct": "d",
+    "feedback": "Los salvapantallas y fondos de escritorio son una vía de comunicación de coste cero, exposición continua y alcance total en equipos corporativos.",
+    "id": 66
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "En un boletín de seguridad (newsletter), ¿qué sección reconoce a los empleados que más correos sospechosos han reportado?",
+    "options": [
+      "Análisis Forense.",
+      "La Amenaza del Mes.",
+      "Cartas Técnicas y Consultas.",
+      "Pillaste el Phishing."
+    ],
+    "correct": "d",
+    "feedback": "La sección 'Pillaste el Phishing' ofrece reconocimiento anónimo o público a los empleados que más correos sospechosos han reportado.",
+    "id": 67
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué contenido se incluye en la sección 'Análisis Forense' sugerida para los boletines de seguridad?",
+    "options": [
+      "Un listado con los nombres de los empleados que fallaron un test.",
+      "Las contraseñas por defecto que deben cambiarse esa semana.",
+      "El estudio breve de ataques consumados en el sector y lecciones aprendidas.",
+      "El calendario de vacaciones y turnos del departamento de TI."
+    ],
+    "correct": "c",
+    "feedback": "La sección de Análisis Forense en una newsletter presenta un estudio breve de ataques reales ocurridos en el sector y las lecciones aprendidas.",
+    "id": 68
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Con qué periodicidad habitual se recomienda enviar los boletines de seguridad (newsletters) al personal?",
+    "options": [
+      "Diaria a primera hora.",
+      "Bianual coincidiendo con auditorías.",
+      "Mensual o trimestral.",
+      "Únicamente tras un incidente grave."
+    ],
+    "correct": "c",
+    "feedback": "Los boletines de seguridad se definen como un correo electrónico periódico (mensual o trimestral) que mantiene viva la comunicación en seguridad.",
+    "id": 69
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Cuál es la función principal de los materiales de 'Formación Estructurada'?",
+    "options": [
+      "Enseñar conceptos, procedimientos y políticas de forma ordenada y completa.",
+      "Crear competiciones de puntos e insignias entre departamentos.",
+      "Medir el comportamiento real mediante pruebas de engaño sin aviso.",
+      "Decorar las zonas comunes con eslóganes visuales rápidos."
+    ],
+    "correct": "a",
+    "feedback": "Los materiales de formación estructurada (cursos e-learning, webinars y charlas) son la base del conocimiento teórico ordenado y completo.",
+    "id": 70
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué característica clave de los cursos e-learning permite saber quién completó el curso, cuándo y con qué nota?",
+    "options": [
+      "La gamificación.",
+      "La trazabilidad.",
+      "La ubicación estratégica.",
+      "La simulación en frío."
+    ],
+    "correct": "b",
+    "feedback": "La trazabilidad en plataformas e-learning permite al departamento de formación hacer un seguimiento detallado de finalización, fechas y puntuaciones.",
+    "id": 71
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué duración orientativa se pone como ejemplo para un curso e-learning inicial obligatorio de nuevas incorporaciones?",
+    "options": [
+      "Un temario semestral de 40 horas presenciales.",
+      "Un curso intensivo de 8 horas en una sola jornada.",
+      "Un curso de 20 minutos con los 5 temas clave de la empresa.",
+      "Una píldora obligatoria de 90 segundos sin evaluación."
+    ],
+    "correct": "c",
+    "feedback": "Como ejemplo de e-learning se cita un curso inicial obligatorio de 20 minutos para nuevas incorporaciones cubriendo los 5 temas más importantes.",
+    "id": 72
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué ventaja diferencial aportan los webinars y charlas presenciales frente a los cursos e-learning grabados?",
+    "options": [
+      "Coste cero de despliegue en todos los salvapantallas de la oficina.",
+      "Interacción directa, resolución de dudas en tiempo real y adaptación sobre la marcha.",
+      "Trazabilidad automática de clics sobre enlaces maliciosos simulados.",
+      "Consumo asíncrono desde el teléfono móvil en menos de dos minutos."
+    ],
+    "correct": "b",
+    "feedback": "Los webinars y charlas en directo destacan por la interacción directa, la resolución de dudas en tiempo real y la adaptación del experto a la audiencia.",
+    "id": 73
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿En qué principio pedagógico se basan los materiales interactivos y de simulación?",
+    "options": [
+      "En la exposición visual repetitiva sin interacción.",
+      "En la evaluación exclusivamente teórica por escrito.",
+      "En 'aprender haciendo' (learning by doing).",
+      "En la memorización pasiva de textos normativos."
+    ],
+    "correct": "c",
+    "feedback": "Los materiales interactivos y de simulación se basan en 'aprender haciendo' (learning by doing), siendo los más eficaces para crear comportamientos seguros.",
+    "id": 74
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Cuál es la duración característica de los vídeos cortos o 'píldoras formativas'?",
+    "options": [
+      "De 1 a 3 minutos.",
+      "De 30 a 45 minutos.",
+      "De 10 a 15 minutos.",
+      "De 15 a 20 minutos."
+    ],
+    "correct": "a",
+    "feedback": "Las píldoras formativas son vídeos de 1 a 3 minutos centrados en un único concepto, adaptados a la falta de tiempo y fáciles de ver en móvil.",
+    "id": 75
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué actividad se cita como ejemplo de gamificación aplicada a la concienciación en ciberseguridad?",
+    "options": [
+      "Un correo mensual con respuestas a consultas técnicas.",
+      "Un concurso trimestral de 'Escape Room' digital por equipos.",
+      "Una charla de 30 minutos sobre fraude del CEO para finanzas.",
+      "Un cartel junto a la impresora sobre trituración de papel."
+    ],
+    "correct": "b",
+    "feedback": "Un concurso trimestral de 'Escape Room' digital, resolviendo puzles de ciberseguridad por equipos, es el ejemplo de gamificación recogido en la unidad.",
+    "id": 76
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Cuál es el orden correcto de las cuatro fases de una simulación de phishing?",
+    "options": [
+      "Lanzamiento, formación inmediata, diseño y revisión documental.",
+      "Diseño, lanzamiento, análisis de métricas y formación inmediata.",
+      "Análisis de métricas, diseño, lanzamiento y sanción disciplinaria.",
+      "Diseño, entrevista personal, lanzamiento y auditoría técnica."
+    ],
+    "correct": "b",
+    "feedback": "Las fases de una simulación de phishing son: 1) Diseño, 2) Lanzamiento, 3) Análisis de métricas y 4) Formación inmediata.",
+    "id": 77
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué ocurre en la fase de 'Formación Inmediata' cuando un empleado hace clic en una simulación de phishing?",
+    "options": [
+      "Es redirigido a una web educativa que explica las señales de alarma.",
+      "Se le matricula automáticamente en un máster técnico de seis meses.",
+      "Su equipo se bloquea automáticamente hasta que llama a soporte.",
+      "Recibe una amonestación formal enviada por recursos humanos."
+    ],
+    "correct": "a",
+    "feedback": "Al hacer clic en el enlace simulado, el usuario es redirigido a una página educativa que le muestra al instante qué señales de alarma debía haber detectado.",
+    "id": 78
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué métricas registra la plataforma durante la fase de análisis de una simulación de phishing?",
+    "options": [
+      "El volumen de papel triturado y los accesos físicos con tarjeta.",
+      "El número de parches pendientes y los puertos abiertos del equipo.",
+      "Quién abrió el correo, hizo clic, introdujo credenciales o lo reportó.",
+      "El tiempo de bloqueo del salvapantallas y el nivel de batería del PC."
+    ],
+    "correct": "c",
+    "feedback": "La plataforma registra quién abrió el correo, quién hizo clic, quién introdujo credenciales en la página de aterrizaje y quién no hizo nada o lo reportó.",
+    "id": 79
+  },
+  {
+    "apartado": "1.4. Materiales formativos",
+    "question": "¿Qué recurso gratuito del INCIBE se destaca especialmente para facilitar la implantación de estrategias de concienciación en pymes?",
+    "options": [
+      "El servicio de cifrado de disco BitLocker.",
+      "El esquema de auditoría técnica CCN-STIC.",
+      "La plataforma LUCIA de gestión de tickets.",
+      "El Kit de Concienciación del INCIBE."
+    ],
+    "correct": "d",
+    "feedback": "El Kit de Concienciación del INCIBE es una herramienta didáctica gratuita orientada especialmente a pymes para entrenar a empleados con diversas metodologías.",
+    "id": 80
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué representan los conceptos AS-IS y TO-BE al implantar y auditar la ciberseguridad en una organización?",
+    "options": [
+      "Las auditorías técnicas de red y las pruebas de ingeniería social.",
+      "Las políticas obligatorias de gerencia y las guías opcionales de TI.",
+      "Los incidentes internos del personal y los ataques externos recibidos.",
+      "El nivel de seguridad existente de partida y el nivel objetivo de llegada."
+    ],
+    "correct": "d",
+    "feedback": "AS-IS representa el escenario de partida (nivel de seguridad existente) y TO-BE el escenario de llegada (nivel objetivo para proteger los procesos críticos).",
+    "id": 81
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cuál es la diferencia clave entre una auditoría técnica y una auditoría interna de cumplimiento en prevención?",
+    "options": [
+      "La técnica mide la tasa de clics en phishing y la de prevención revisa contratos.",
+      "La técnica se aplica solo a pymes y la de prevención solo al sector público.",
+      "La técnica busca fallos en software/sistemas y la de prevención evalúa personas, procesos y políticas.",
+      "La técnica la realiza siempre un empleado interno y la de prevención un juez."
+    ],
+    "correct": "c",
+    "feedback": "Frente a la auditoría técnica (pentest o vulnerabilidades de sistemas), la auditoría de prevención se enfoca en personas, procesos y políticas para medir el 'firewall humano'.",
+    "id": 82
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Quién puede realizar una auditoría interna de cumplimiento en materia de prevención?",
+    "options": [
+      "Exclusivamente inspectores enviados por la AEPD.",
+      "Únicamente el proveedor de antivirus contratado por la empresa.",
+      "Cualquier empleado del departamento auditado sin formación previa.",
+      "Personal cualificado de la propia organización o un tercero en su nombre."
+    ],
+    "correct": "d",
+    "feedback": "Una auditoría interna de cumplimiento es una evaluación sistemática y objetiva realizada por personal cualificado de la propia organización o un tercero en su nombre.",
+    "id": 83
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué analogía se utiliza para explicar el papel de la auditoría de prevención tras definir políticas y dar formación?",
+    "options": [
+      "Instalar cámaras en un aparcamiento para grabar matrículas.",
+      "Salir a la carretera para verificar si el conductor respeta las normas.",
+      "Construir una muralla más alta alrededor de un castillo.",
+      "Cambiar las cerraduras de un edificio después de un robo."
+    ],
+    "correct": "b",
+    "feedback": "Tener políticas (coche seguro) y formación (curso de conducción) no basta: la auditoría es 'salir a la carretera' para observar y verificar el comportamiento real.",
+    "id": 84
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cuál de las siguientes preguntas corresponde a los objetivos clave de una auditoría interna de prevención?",
+    "options": [
+      "¿Se conocen las políticas, se entienden los riesgos y se cumplen los procedimientos?",
+      "¿Cuántas licencias ofimáticas caducan durante el próximo trimestre?",
+      "¿Cuál es el precio de mercado de un nuevo cortafuegos perimetral?",
+      "¿Qué marca de servidor ofrece mayor velocidad de procesamiento en red?"
+    ],
+    "correct": "a",
+    "feedback": "La auditoría de prevención busca comprobar si se conocen las políticas, se entienden los riesgos, es eficaz la formación, se cumplen los procedimientos y dónde están las debilidades.",
+    "id": 85
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué paso previo debe realizarse antes de aplicar las técnicas de recopilación de evidencias en una auditoría?",
+    "options": [
+      "Definir el alcance y objetivos identificando elementos esenciales del negocio.",
+      "Publicar las sanciones previstas en el tablón de anuncios general.",
+      "Lanzar un escaneo de vulnerabilidades sobre las webs de proveedores.",
+      "Desconectar temporalmente los equipos del departamento financiero."
+    ],
+    "correct": "a",
+    "feedback": "Antes de recopilar evidencias se deben definir alcance y objetivos, identificando elementos esenciales para el negocio (ficheros, bases de datos, webs, equipos y programas).",
+    "id": 86
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cuál es el punto de partida habitual en la metodología de auditoría de cumplimiento?",
+    "options": [
+      "La configuración de políticas GPO.",
+      "El USB Drop Test en zonas comunes.",
+      "Las llamadas de vishing a soporte.",
+      "La revisión documental."
+    ],
+    "correct": "d",
+    "feedback": "La Revisión Documental es el punto de partida para comprobar que el plan, políticas, registros de asistencia, resultados y materiales son coherentes y están actualizados.",
+    "id": 87
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué conjunto de documentos examina el auditor durante la fase de revisión documental?",
+    "options": [
+      "Logs del firewall perimetral y capturas de tráfico de red.",
+      "Código fuente de aplicaciones y diagramas eléctricos del edificio.",
+      "Facturas de proveedores, nóminas y contratos de alquiler.",
+      "Plan de formación, políticas, registros de asistencia, resultados y materiales."
+    ],
+    "correct": "d",
+    "feedback": "En la revisión documental se examina el Plan de Formación, las políticas de seguridad, registros de asistencia, resultados de cuestionarios y materiales utilizados.",
+    "id": 88
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cuál es el propósito de las entrevistas y cuestionarios realizados a una muestra representativa de empleados?",
+    "options": [
+      "Realizar un examen eliminatorio para decidir la continuidad del trabajador.",
+      "Recoger denuncias anónimas sobre la gestión salarial de los mandos.",
+      "Mantener una conversación para evaluar el nivel real de asimilación de conceptos.",
+      "Comprobar la velocidad de escritura y manejo ofimático del personal."
+    ],
+    "correct": "c",
+    "feedback": "Las entrevistas no son un examen, sino una conversación con una muestra de distintos departamentos y niveles para evaluar si el mensaje ha calado.",
+    "id": 89
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cómo se conoce habitualmente la técnica de observación directa in situ de las políticas físicas y del puesto de trabajo?",
+    "options": [
+      "Simulación en frío.",
+      "Paseos de Seguridad.",
+      "Escaneo de puertos internos.",
+      "Análisis forense pasivo."
+    ],
+    "correct": "b",
+    "feedback": "La Observación Directa se denomina 'Paseos de Seguridad' y verifica in situ el cumplimiento de pantallas limpias, mesas limpias, control de acceso y desecho de papel.",
+    "id": 90
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "Durante un 'Paseo de Seguridad', ¿qué aspecto verifica el auditor en el punto de 'Control de Acceso' de su checklist?",
+    "options": [
+      "Si el servidor LDAP responde en menos de cinco segundos.",
+      "Si se desafía a personas desconocidas que intentan acceder a la oficina.",
+      "Si las copias de seguridad se almacenan en una nube cifrada.",
+      "Si los portátiles tienen instalado el último parche de Windows."
+    ],
+    "correct": "b",
+    "feedback": "En el checklist de observación directa, el control de acceso verifica si los empleados desafían a personas desconocidas o asumen sin comprobar que tienen permiso.",
+    "id": 91
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué técnica de auditoría se considera la parte más objetiva al apoyarse en datos para medir el comportamiento?",
+    "options": [
+      "Las entrevistas abiertas con dirección.",
+      "La revisión de cartelería en pasillos.",
+      "El análisis de métricas y pruebas prácticas.",
+      "La lectura del manual de bienvenida."
+    ],
+    "correct": "c",
+    "feedback": "El Análisis de Métricas y Pruebas Prácticas es la parte más objetiva, utilizando datos de campañas de phishing, incidentes previos y pruebas controladas.",
+    "id": 92
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "Al analizar métricas de simulaciones de phishing durante la auditoría, ¿qué evolución indica que el programa funciona correctamente?",
+    "options": [
+      "Que tanto la tasa de clics como la de reportes bajen a cero.",
+      "Que la tasa de clics suba y la tasa de reportes disminuya.",
+      "Que aumente el número de correos borrados sin avisar a TI.",
+      "Que la tasa de clics baje y la tasa de reportes suba."
+    ],
+    "correct": "d",
+    "feedback": "Una evolución positiva en simulaciones de phishing implica que la tasa de clics desciende mientras la tasa de reportes de usuarios aumenta.",
+    "id": 93
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué requisito indispensable debe cumplirse antes de que el auditor ejecute pruebas de ingeniería social controlada?",
+    "options": [
+      "Contar con la debida autorización previa de la organización.",
+      "Desactivar el antivirus corporativo en los equipos seleccionados.",
+      "Avisar con un mes de antelación el día exacto a todos los empleados.",
+      "Notificar obligatoriamente la prueba a la policía y a la AEPD."
+    ],
+    "correct": "a",
+    "feedback": "Las pruebas de ingeniería social controlada (como vishing o USB Drop Test) deben realizarse siempre con la debida autorización.",
+    "id": 94
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿En qué consiste la prueba práctica de auditoría denominada 'USB Drop Test'?",
+    "options": [
+      "Dejar un USB con software inofensivo en zona común para ver si lo conectan.",
+      "Formatear todas las memorias USB de los empleados al terminar el mes.",
+      "Bloquear físicamente los puertos USB de los ordenadores de recepción.",
+      "Comprobar la velocidad de cifrado de los dispositivos extraíbles corporativos."
+    ],
+    "correct": "a",
+    "feedback": "En un USB Drop Test se deja un USB corporativo con software inofensivo en una zona común; si un empleado lo conecta, el software notifica al auditor.",
+    "id": 95
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Cuál es la finalidad esencial del Informe de Auditoría y el Plan de Acción?",
+    "options": [
+      "Elaborar una lista de culpables para aplicar despidos inmediatos.",
+      "Ofrecer un diagnóstico para mejorar, mitigar riesgos y proteger la reputación.",
+      "Demostrar que la empresa ha alcanzado un estado de riesgo cero.",
+      "Archivar el cumplimiento legal sin introducir cambios operativos."
+    ],
+    "correct": "b",
+    "feedback": "El resultado final de la auditoría no es una lista de culpables, sino un diagnóstico objetivo para mejorar, tomar medidas correctivas y proteger la reputación.",
+    "id": 96
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "En la estructura del Informe de Auditoría, ¿cómo suelen clasificarse los hallazgos según su criticidad?",
+    "options": [
+      "Público, Interno, Confidencial y Restringido.",
+      "Prevención, Concienciación y Respuesta.",
+      "No Conformidad Mayor, Menor y Oportunidad de Mejora.",
+      "Phishing, Vishing, Smishing y Malware."
+    ],
+    "correct": "c",
+    "feedback": "En el apartado de Hallazgos del informe se describen las evidencias encontradas clasificándolas por criticidad (No Conformidad Mayor, Menor, Oportunidad de Mejora).",
+    "id": 97
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "¿Qué dos elementos clave deben asignarse a cada acción correctora dentro del Plan de Acción del informe?",
+    "options": [
+      "Un responsable y un plazo de ejecución.",
+      "Un cartel impreso y un cuestionario previo.",
+      "Un algoritmo hash y una dirección IP de origen.",
+      "Una sanción económica y un departamento externo."
+    ],
+    "correct": "a",
+    "feedback": "En el apartado de Recomendaciones y Plan de Acción, para cada hallazgo se proponen acciones correctoras asignando un responsable y un plazo de ejecución.",
+    "id": 98
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "En el ejemplo de hallazgo de 3 equipos desbloqueados en contabilidad, ¿qué medida técnica complementa al refuerzo formativo?",
+    "options": [
+      "Retirar el acceso a Internet en todo el departamento.",
+      "Configurar un bloqueo automático de pantalla más agresivo por GPO.",
+      "Instalar cámaras ocultas encima de cada teclado.",
+      "Sustituir los ordenadores de sobremesa por teléfonos móviles."
+    ],
+    "correct": "b",
+    "feedback": "Además de reforzar la formación en pantallas limpias, la recomendación técnica propuesta es configurar un bloqueo automático más agresivo (ej. 1 minuto) mediante GPO.",
+    "id": 99
+  },
+  {
+    "apartado": "1.5. Auditorías internas",
+    "question": "Dentro del ciclo de mejora continua Plan-Do-Check-Act (PDCA), ¿qué fase cumple la auditoría interna de cumplimiento?",
+    "options": [
+      "La fase Act (rediseño tras los resultados).",
+      "La fase Do (implantación de controles).",
+      "La fase Check (verificación y comprobación).",
+      "La fase Plan (diseño inicial del programa)."
+    ],
+    "correct": "c",
+    "feedback": "La auditoría corresponde a la fase Check (comprobar) del ciclo PDCA: se diseña (Plan), se implementa (Do), se audita (Check) y se ajusta para mejorar (Act) hacia el estado TO-BE.",
+    "id": 100
+  }
+];
+
+    const allSections = [
+        "1.1. Principios generales",
+        "1.2. Protección del puesto",
+        "1.3. Plan de concienciación",
+        "1.4. Materiales formativos",
+        "1.5. Auditorías internas"
+    ];
+
+    const letters = ['A', 'B', 'C', 'D'];
+
+    let activeQuiz = [];
+    let currentMode = 'all'; // 'all', 'exam', 'section', 'wrong'
+    let activeSectionFilter = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let wrongCount = 0;
+    let answeredCurrent = false;
+    let failedQuestionsMap = new Map(); // id -> question object
+    let sessionStats = {}; // apartado -> {correct, total}
+    let timerInterval = null;
+    let elapsedSeconds = 0;
+
+    const questionTextElement = document.getElementById('question-text');
+    const questionMetaElement = document.getElementById('question-meta');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackBox = document.getElementById('feedback-box');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreElement = document.getElementById('score');
+    const wrongScoreElement = document.getElementById('wrong-score');
+    const progressText = document.getElementById('progress-text');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const quizContent = document.getElementById('quiz-content');
+    const endScreen = document.getElementById('end-screen');
+    const timerBadge = document.getElementById('timer-badge');
+
+    function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function formatTime(secs) {
+        const m = String(Math.floor(secs / 60)).padStart(2, '0');
+        const s = String(secs % 60).padStart(2, '0');
+        return `${m}:${s}`;
+    }
+
+    function startTimer() {
+        stopTimer();
+        elapsedSeconds = 0;
+        timerBadge.innerText = "00:00";
+        timerBadge.style.display = 'inline-block';
+        timerInterval = setInterval(() => {
+            elapsedSeconds++;
+            timerBadge.innerText = formatTime(elapsedSeconds);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    function updateWrongModeButton() {
+        const count = failedQuestionsMap.size;
+        const btn = document.getElementById('btn-mode-wrong');
+        document.getElementById('saved-wrong-count').innerText = count;
+        btn.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+
+    function updateModeButtonsUI() {
+        document.getElementById('btn-mode-all').classList.toggle('active', currentMode === 'all');
+        document.getElementById('btn-mode-exam').classList.toggle('active', currentMode === 'exam');
+        document.getElementById('btn-mode-wrong').classList.toggle('active', currentMode === 'wrong');
+    }
+
+    function startMode(mode, sectionName = null) {
+        currentMode = mode;
+        activeSectionFilter = sectionName;
+        const shouldShuffle = document.getElementById('shuffle-checkbox').checked;
+
+        if (mode === 'all') {
+            activeQuiz = shouldShuffle ? shuffleArray(allQuestions) : [...allQuestions];
+            stopTimer();
+            timerBadge.style.display = 'none';
+        } else if (mode === 'section' && sectionName) {
+            const filtered = allQuestions.filter(q => q.apartado === sectionName);
+            activeQuiz = shouldShuffle ? shuffleArray(filtered) : filtered;
+            stopTimer();
+            timerBadge.style.display = 'none';
+        } else if (mode === 'exam') {
+            // 4 preguntas aleatorias por cada uno de los 5 apartados = 20 preguntas equilibradas
+            let examPool = [];
+            allSections.forEach(sec => {
+                const secQuestions = shuffleArray(allQuestions.filter(q => q.apartado === sec));
+                examPool = examPool.concat(secQuestions.slice(0, 4));
+            });
+            activeQuiz = shuffleArray(examPool);
+            startTimer();
+        } else if (mode === 'wrong') {
+            const wrongList = Array.from(failedQuestionsMap.values());
+            if (wrongList.length === 0) {
+                startMode('all');
+                return;
+            }
+            activeQuiz = shouldShuffle ? shuffleArray(wrongList) : wrongList;
+            stopTimer();
+            timerBadge.style.display = 'none';
+        }
+
+        currentQuestionIndex = 0;
+        score = 0;
+        wrongCount = 0;
+        sessionStats = {};
+        scoreElement.innerText = '0';
+        wrongScoreElement.innerText = '0';
+        quizContent.style.display = 'block';
+        endScreen.style.display = 'none';
+
+        updateModeButtonsUI();
+        loadQuestion();
+    }
+
+    function restartCurrentMode() {
+        startMode(currentMode, activeSectionFilter);
+    }
+
+    function renderSectionProgress() {
+        const progressContainer = document.getElementById('section-progress');
+        progressContainer.innerHTML = '';
+
+        const currentSection = activeQuiz[currentQuestionIndex].apartado;
+
+        allSections.forEach(sec => {
+            const badge = document.createElement('span');
+            badge.className = 'section-badge';
+            if (sec === currentSection) badge.classList.add('active');
+            badge.innerText = sec;
+            badge.title = `Estudiar solo ${sec} (20 preguntas)`;
+            badge.onclick = () => startMode('section', sec);
+            progressContainer.appendChild(badge);
+        });
+    }
+
+    function loadQuestion() {
+        answeredCurrent = false;
+        feedbackBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+
+        renderSectionProgress();
+
+        const currentData = activeQuiz[currentQuestionIndex];
+        const total = activeQuiz.length;
+        const pct = Math.round(((currentQuestionIndex) / total) * 100);
+        progressBarFill.style.width = `${pct}%`;
+
+        let modeLabel = currentMode === 'exam' ? 'Simulacro Examen'
+                      : currentMode === 'wrong' ? 'Repaso de Fallos'
+                      : currentMode === 'section' ? activeSectionFilter
+                      : 'Test Completo';
+
+        progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${total} · ${modeLabel}`;
+        questionMetaElement.innerText = `${currentData.apartado} (Pregunta #${currentData.id})`;
+        questionTextElement.innerText = currentData.question;
+
+        const correctIdx = "abcd".indexOf(currentData.correct);
+
+        currentData.options.forEach((optText, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.dataset.index = index;
+            btn.innerHTML = `<strong>${letters[index]})</strong> ${optText}`;
+            btn.onclick = () => selectAnswer(index, correctIdx, currentData);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedIdx, correctIdx, currentData) {
+        if (answeredCurrent) return;
+        answeredCurrent = true;
+
+        const allButtons = optionsContainer.querySelectorAll('.option-btn');
+        allButtons.forEach(btn => btn.disabled = true);
+
+        const isCorrect = (selectedIdx === correctIdx);
+
+        if (!sessionStats[currentData.apartado]) {
+            sessionStats[currentData.apartado] = { correct: 0, total: 0 };
+        }
+        sessionStats[currentData.apartado].total++;
+
+        if (isCorrect) {
+            allButtons[selectedIdx].classList.add('correct');
+            score++;
+            scoreElement.innerText = score;
+            sessionStats[currentData.apartado].correct++;
+            failedQuestionsMap.delete(currentData.id);
+            feedbackBox.innerHTML = `<strong>¡Correcto! (${letters[correctIdx]})</strong><br>${currentData.feedback}`;
+            feedbackBox.className = 'feedback-correct';
+        } else {
+            allButtons[selectedIdx].classList.add('incorrect');
+            allButtons[correctIdx].classList.add('correct');
+            wrongCount++;
+            wrongScoreElement.innerText = wrongCount;
+            failedQuestionsMap.set(currentData.id, currentData);
+            feedbackBox.innerHTML = `<strong>Incorrecto. La respuesta correcta es la ${letters[correctIdx]}.</strong><br>${currentData.feedback}`;
+            feedbackBox.className = 'feedback-incorrect';
+        }
+
+        updateWrongModeButton();
+        feedbackBox.style.display = 'block';
+        nextBtn.style.display = 'inline-block';
+        nextBtn.innerText = (currentQuestionIndex === activeQuiz.length - 1) ? 'Ver Resultados' : 'Siguiente Pregunta →';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < activeQuiz.length) {
+            loadQuestion();
+        } else {
+            showEndScreen();
+        }
+    }
+
+    function showEndScreen() {
+        stopTimer();
+        progressBarFill.style.width = '100%';
+        quizContent.style.display = 'none';
+        endScreen.style.display = 'block';
+
+        const total = activeQuiz.length;
+        const percent = Math.round((score / total) * 100);
+        const grade = ((score / total) * 10).toFixed(1);
+
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('total-questions-text').innerText = total;
+        document.getElementById('final-percent').innerText = `${percent}%`;
+
+        const gradeEl = document.getElementById('final-grade');
+        gradeEl.innerText = `${grade} / 10`;
+        gradeEl.className = parseFloat(grade) >= 5.0 ? 'final-grade' : 'final-grade fail';
+
+        const endTitle = document.getElementById('end-title');
+        const endSubtitle = document.getElementById('end-subtitle');
+        if (currentMode === 'exam') {
+            endTitle.innerText = parseFloat(grade) >= 5.0 ? '¡Simulacro Superado!' : 'Simulacro Finalizado';
+            endSubtitle.innerText = 'Resultado del simulacro de examen (4 preguntas aleatorias por apartado).';
+            document.getElementById('final-time-wrap').style.display = 'inline';
+            document.getElementById('final-time').innerText = formatTime(elapsedSeconds);
+        } else {
+            endTitle.innerText = '¡Sesión Completada!';
+            endSubtitle.innerText = 'Resumen de tu práctica en la UD1: Prevención y Concienciación.';
+            document.getElementById('final-time-wrap').style.display = 'none';
+        }
+
+        // Desglose por apartado
+        const breakdownContent = document.getElementById('breakdown-content');
+        breakdownContent.innerHTML = '';
+        allSections.forEach(sec => {
+            const stat = sessionStats[sec];
+            if (!stat) return;
+            const secPct = Math.round((stat.correct / stat.total) * 100);
+            const row = document.createElement('div');
+            row.className = 'breakdown-row';
+            row.innerHTML = `
+                <div class="breakdown-label">
+                    <span>${sec}</span>
+                    <span>${stat.correct} / ${stat.total} (${secPct}%)</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="breakdown-fill" style="width:${secPct}%; background:${secPct >= 70 ? '#28a745' : secPct >= 50 ? '#d97706' : '#dc3545'};"></div>
+                </div>
+            `;
+            breakdownContent.appendChild(row);
+        });
+
+        const retryBtn = document.getElementById('end-retry-wrong');
+        if (failedQuestionsMap.size > 0) {
+            retryBtn.style.display = 'inline-block';
+            retryBtn.innerText = `Repasar fallos (${failedQuestionsMap.size})`;
+        } else {
+            retryBtn.style.display = 'none';
+        }
+    }
+
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (endScreen.style.display === 'block') return;
+        const key = e.key.toLowerCase();
+        if (!answeredCurrent) {
+            const keyMap = { 'a': 0, '1': 0, 'b': 1, '2': 1, 'c': 2, '3': 2, 'd': 3, '4': 3 };
+            if (key in keyMap) {
+                const currentData = activeQuiz[currentQuestionIndex];
+                const correctIdx = "abcd".indexOf(currentData.correct);
+                selectAnswer(keyMap[key], correctIdx, currentData);
+            }
+        } else if (key === 'enter' || key === 'arrowright') {
+            nextQuestion();
+        }
+    });
+
+    window.onload = () => {
+        startMode('all');
+    };
+</script>
+
+</body>
+</html>
