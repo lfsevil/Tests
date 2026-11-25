@@ -293,32 +293,57 @@
 
     .action-row {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         margin-top: 22px;
+        gap: 12px;
+    }
+    .nav-buttons {
+        display: flex;
         gap: 10px;
+        align-items: center;
     }
     .kbd-hint {
         font-size: 12px;
         color: #8c98a4;
     }
     .primary-btn {
-        padding: 11px 22px;
+        padding: 11px 20px;
         background: #2c3e50;
         color: white;
         border: none;
         border-radius: 7px;
         cursor: pointer;
-        font-size: 15px;
+        font-size: 14.5px;
         font-weight: 600;
-        transition: background 0.2s ease;
+        transition: background 0.2s ease, opacity 0.2s ease;
     }
-    .primary-btn:hover { background: #1a252f; }
+    .primary-btn:hover:not(:disabled) { background: #1a252f; }
+    .primary-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    .secondary-btn {
+        padding: 11px 18px;
+        background: #eef2f6;
+        color: #2c3e50;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14.5px;
+        font-weight: 600;
+        transition: background 0.2s ease, opacity 0.2s ease;
+    }
+    .secondary-btn:hover:not(:disabled) { background: #e2e8f0; }
+    .secondary-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
     .retry-wrong-btn {
         background: #d97706;
     }
     .retry-wrong-btn:hover { background: #b45309; }
-    #next-btn { display: none; }
 
     #end-screen {
         text-align: center;
@@ -383,6 +408,7 @@
         #quiz-container { padding: 20px 18px; }
         .course-header { padding: 18px 20px; }
         .kbd-hint { display: none; }
+        .action-row { justify-content: flex-end; }
     }
 </style>
 </head>
@@ -434,8 +460,11 @@
             <div id="feedback-box"></div>
 
             <div class="action-row">
-                <span class="kbd-hint">Atajos: teclas A-D (o 1-4) para responder · Enter para siguiente</span>
-                <button class="primary-btn" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta &#8594;</button>
+                <span class="kbd-hint">Atajos: A-D (o 1-4) responder · ← / → moverse libremente</span>
+                <div class="nav-buttons">
+                    <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()">&#8592; Anterior</button>
+                    <button class="primary-btn" id="next-btn" onclick="nextQuestion()">Siguiente &#8594;</button>
+                </div>
             </div>
         </div>
 
@@ -446,6 +475,7 @@
             <p>
                 Aciertos: <strong id="final-score">0</strong> de <strong id="total-questions-text">100</strong>
                 (<span id="final-percent">0%</span>)
+                <span id="unanswered-wrap" style="display:none;"> · Sin responder: <strong id="final-unanswered">0</strong></span>
                 <span id="final-time-wrap" style="display:none;"> · Tiempo: <strong id="final-time">00:00</strong></span>
             </p>
 
@@ -519,28 +549,28 @@
   },
   {
     "apartado": "1.1. Principios generales",
-    "question": "¿Qué principio básico establece el Artículo 6 del Esquema Nacional de Seguridad (RD 311/2022)?",
+    "question": "¿Qué principio básico establece el Artículo 7 del Esquema Nacional de Seguridad (RD 311/2022)?",
     "options": [
       "La seguridad entendida como un proceso integral.",
-      "La reevaluación periódica de las medidas implantadas.",
+      "La vigilancia continua y reevaluación periódica.",
       "La gestión de la seguridad basada en los riesgos.",
-      "La seguridad estructurada como una función diferenciada."
+      "La diferenciación de responsabilidades en seguridad."
     ],
     "correct": "c",
-    "feedback": "En el ENS (RD 311/2022), el Artículo 5 es proceso integral, el Artículo 6 es gestión basada en los riesgos, el 9 reevaluación periódica y el 10 función diferenciada.",
+    "feedback": "En el ENS vigente (RD 311/2022), el Artículo 6 es proceso integral, el Artículo 7 es gestión de la seguridad basada en los riesgos, el 10 vigilancia continua y reevaluación periódica y el 11 diferenciación de responsabilidades.",
     "id": 5
   },
   {
     "apartado": "1.1. Principios generales",
-    "question": "¿Cuál de los siguientes principios del ENS (RD 311/2022) corresponde específicamente al Artículo 8?",
+    "question": "¿Cuál de los siguientes principios del ENS (RD 311/2022) corresponde específicamente al Artículo 9?",
     "options": [
-      "La seguridad como proceso integral.",
-      "Prevención, reacción y recuperación.",
-      "Reevaluación periódica.",
-      "Líneas de defensa."
+      "La seguridad como un proceso integral.",
+      "Prevención, detección, respuesta y conservación.",
+      "Vigilancia continua y reevaluación periódica.",
+      "Existencia de líneas de defensa."
     ],
     "correct": "d",
-    "feedback": "El Artículo 8 del ENS establece el principio de 'Líneas de defensa' (el 7 es prevención, reacción y recuperación; el 9 reevaluación periódica).",
+    "feedback": "El Artículo 9 del ENS (RD 311/2022) establece el principio de 'Existencia de líneas de defensa' (el 6 es proceso integral, el 8 prevención, detección, respuesta y conservación, y el 10 vigilancia continua y reevaluación periódica).",
     "id": 6
   },
   {
@@ -1778,14 +1808,13 @@
     const letters = ['A', 'B', 'C', 'D'];
 
     let activeQuiz = [];
+    let userAnswers = []; // índice seleccionado por posición en activeQuiz, o null si no contestada
     let currentMode = 'all'; // 'all', 'exam', 'section', 'wrong'
     let activeSectionFilter = null;
     let currentQuestionIndex = 0;
     let score = 0;
     let wrongCount = 0;
-    let answeredCurrent = false;
     let failedQuestionsMap = new Map(); // id -> question object
-    let sessionStats = {}; // apartado -> {correct, total}
     let timerInterval = null;
     let elapsedSeconds = 0;
 
@@ -1793,6 +1822,7 @@
     const questionMetaElement = document.getElementById('question-meta');
     const optionsContainer = document.getElementById('options-container');
     const feedbackBox = document.getElementById('feedback-box');
+    const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const scoreElement = document.getElementById('score');
     const wrongScoreElement = document.getElementById('wrong-score');
@@ -1863,7 +1893,6 @@
             stopTimer();
             timerBadge.style.display = 'none';
         } else if (mode === 'exam') {
-            // 4 preguntas aleatorias por cada uno de los 5 apartados = 20 preguntas equilibradas
             let examPool = [];
             allSections.forEach(sec => {
                 const secQuestions = shuffleArray(allQuestions.filter(q => q.apartado === sec));
@@ -1882,10 +1911,10 @@
             timerBadge.style.display = 'none';
         }
 
+        userAnswers = new Array(activeQuiz.length).fill(null);
         currentQuestionIndex = 0;
         score = 0;
         wrongCount = 0;
-        sessionStats = {};
         scoreElement.innerText = '0';
         wrongScoreElement.innerText = '0';
         quizContent.style.display = 'block';
@@ -1917,16 +1946,12 @@
     }
 
     function loadQuestion() {
-        answeredCurrent = false;
-        feedbackBox.style.display = 'none';
-        nextBtn.style.display = 'none';
         optionsContainer.innerHTML = '';
-
         renderSectionProgress();
 
         const currentData = activeQuiz[currentQuestionIndex];
         const total = activeQuiz.length;
-        const pct = Math.round(((currentQuestionIndex) / total) * 100);
+        const pct = Math.round(((currentQuestionIndex + 1) / total) * 100);
         progressBarFill.style.width = `${pct}%`;
 
         let modeLabel = currentMode === 'exam' ? 'Simulacro Examen'
@@ -1939,6 +1964,7 @@
         questionTextElement.innerText = currentData.question;
 
         const correctIdx = "abcd".indexOf(currentData.correct);
+        const savedAnswer = userAnswers[currentQuestionIndex];
 
         currentData.options.forEach((optText, index) => {
             const btn = document.createElement('button');
@@ -1948,49 +1974,67 @@
             btn.onclick = () => selectAnswer(index, correctIdx, currentData);
             optionsContainer.appendChild(btn);
         });
+
+        // Restaurar estado si esta pregunta ya fue respondida previamente
+        if (savedAnswer !== null) {
+            renderAnsweredState(savedAnswer, correctIdx, currentData);
+        } else {
+            feedbackBox.style.display = 'none';
+        }
+
+        // Botones de navegación siempre disponibles sin obligación de contestar
+        prevBtn.disabled = (currentQuestionIndex === 0);
+        nextBtn.innerText = (currentQuestionIndex === total - 1) ? 'Finalizar y Ver Resultados' : 'Siguiente →';
     }
 
-    function selectAnswer(selectedIdx, correctIdx, currentData) {
-        if (answeredCurrent) return;
-        answeredCurrent = true;
-
+    function renderAnsweredState(selectedIdx, correctIdx, currentData) {
         const allButtons = optionsContainer.querySelectorAll('.option-btn');
         allButtons.forEach(btn => btn.disabled = true);
 
         const isCorrect = (selectedIdx === correctIdx);
-
-        if (!sessionStats[currentData.apartado]) {
-            sessionStats[currentData.apartado] = { correct: 0, total: 0 };
-        }
-        sessionStats[currentData.apartado].total++;
-
         if (isCorrect) {
             allButtons[selectedIdx].classList.add('correct');
-            score++;
-            scoreElement.innerText = score;
-            sessionStats[currentData.apartado].correct++;
-            failedQuestionsMap.delete(currentData.id);
             feedbackBox.innerHTML = `<strong>¡Correcto! (${letters[correctIdx]})</strong><br>${currentData.feedback}`;
             feedbackBox.className = 'feedback-correct';
         } else {
             allButtons[selectedIdx].classList.add('incorrect');
             allButtons[correctIdx].classList.add('correct');
-            wrongCount++;
-            wrongScoreElement.innerText = wrongCount;
-            failedQuestionsMap.set(currentData.id, currentData);
             feedbackBox.innerHTML = `<strong>Incorrecto. La respuesta correcta es la ${letters[correctIdx]}.</strong><br>${currentData.feedback}`;
             feedbackBox.className = 'feedback-incorrect';
         }
+        feedbackBox.style.display = 'block';
+    }
+
+    function selectAnswer(selectedIdx, correctIdx, currentData) {
+        if (userAnswers[currentQuestionIndex] !== null) return;
+
+        userAnswers[currentQuestionIndex] = selectedIdx;
+        const isCorrect = (selectedIdx === correctIdx);
+
+        if (isCorrect) {
+            score++;
+            scoreElement.innerText = score;
+            failedQuestionsMap.delete(currentData.id);
+        } else {
+            wrongCount++;
+            wrongScoreElement.innerText = wrongCount;
+            failedQuestionsMap.set(currentData.id, currentData);
+        }
 
         updateWrongModeButton();
-        feedbackBox.style.display = 'block';
-        nextBtn.style.display = 'inline-block';
-        nextBtn.innerText = (currentQuestionIndex === activeQuiz.length - 1) ? 'Ver Resultados' : 'Siguiente Pregunta →';
+        renderAnsweredState(selectedIdx, correctIdx, currentData);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadQuestion();
+        }
     }
 
     function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < activeQuiz.length) {
+        if (currentQuestionIndex < activeQuiz.length - 1) {
+            currentQuestionIndex++;
             loadQuestion();
         } else {
             showEndScreen();
@@ -2004,12 +2048,20 @@
         endScreen.style.display = 'block';
 
         const total = activeQuiz.length;
+        const unanswered = userAnswers.filter(a => a === null).length;
         const percent = Math.round((score / total) * 100);
         const grade = ((score / total) * 10).toFixed(1);
 
         document.getElementById('final-score').innerText = score;
         document.getElementById('total-questions-text').innerText = total;
         document.getElementById('final-percent').innerText = `${percent}%`;
+
+        if (unanswered > 0) {
+            document.getElementById('unanswered-wrap').style.display = 'inline';
+            document.getElementById('final-unanswered').innerText = unanswered;
+        } else {
+            document.getElementById('unanswered-wrap').style.display = 'none';
+        }
 
         const gradeEl = document.getElementById('final-grade');
         gradeEl.innerText = `${grade} / 10`;
@@ -2028,7 +2080,19 @@
             document.getElementById('final-time-wrap').style.display = 'none';
         }
 
-        // Desglose por apartado
+        // Calcular desglose por apartado a partir de activeQuiz y userAnswers
+        const sessionStats = {};
+        activeQuiz.forEach((q, idx) => {
+            if (!sessionStats[q.apartado]) {
+                sessionStats[q.apartado] = { correct: 0, total: 0 };
+            }
+            sessionStats[q.apartado].total++;
+            const correctIdx = "abcd".indexOf(q.correct);
+            if (userAnswers[idx] === correctIdx) {
+                sessionStats[q.apartado].correct++;
+            }
+        });
+
         const breakdownContent = document.getElementById('breakdown-content');
         breakdownContent.innerHTML = '';
         allSections.forEach(sec => {
@@ -2058,19 +2122,27 @@
         }
     }
 
-    // Atajos de teclado
+    // Atajos de teclado (navegación libre + respuesta rápida)
     document.addEventListener('keydown', (e) => {
         if (endScreen.style.display === 'block') return;
         const key = e.key.toLowerCase();
-        if (!answeredCurrent) {
+
+        if (key === 'arrowleft') {
+            prevQuestion();
+            return;
+        }
+        if (key === 'arrowright' || key === 'enter') {
+            nextQuestion();
+            return;
+        }
+
+        if (userAnswers[currentQuestionIndex] === null) {
             const keyMap = { 'a': 0, '1': 0, 'b': 1, '2': 1, 'c': 2, '3': 2, 'd': 3, '4': 3 };
             if (key in keyMap) {
                 const currentData = activeQuiz[currentQuestionIndex];
                 const correctIdx = "abcd".indexOf(currentData.correct);
                 selectAnswer(keyMap[key], correctIdx, currentData);
             }
-        } else if (key === 'enter' || key === 'arrowright') {
-            nextQuestion();
         }
     });
 
